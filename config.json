@@ -1,0 +1,102 @@
+{
+  "name": "Google-Cloud-Load-Balancer",
+  "type": "executer",
+  "exposeRoute": false,
+  "execProgram": "node",
+  "main": "app.js",
+  "imgUrl": "logo.png",
+  "version": "0.0.1",
+  "category": ["CLOUD"],
+  "keywords": [
+    "GCP",
+    "compute",
+    "google",
+    "platform",
+    "cloud",
+    "project",
+    "infra",
+    "infrastructure",
+    "network",
+    "subnet",
+    "firewall",
+    "IP",
+    "route"
+  ],
+  "settings": [
+    {
+      "name": "project",
+      "viewName": "Default Project Name",
+      "type": "string",
+      "description": "GCP Project defines how your app interacts with services and resources",
+      "placeholder": "project-alpha",
+      "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+    },
+    {
+      "name": "region",
+      "viewName": "Default Region",
+      "type": "string",
+      "description": "Geographical GCP region where infrastructure is or will be located",
+      "placeholder": "us-east1",
+      "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
+    },
+    {
+      "name": "diskAutoDelete",
+      "viewName": "Default Disk Auto Delete",
+      "type": "boolean",
+      "description": "If checked, when the new VM is deleted the disk will be also",
+      "learnUrl": "https://cloud.google.com/compute/docs/disks/add-persistent-disk"
+    },
+    {
+      "name": "waitForOperation",
+      "viewName": "Default Wait For Operation End",
+      "type": "boolean",
+      "description": "If checked, wait for this action to complete before moving on to next action in pipeline.",
+      "learnUrl": "https://github.com/Kaholo/kaholo-plugin-GoogleCloudComputeEngine"
+    }
+  ],
+  "methods": [
+    {
+      "name": "createLoadBalancer",
+      "viewName": "Create Load Balancer",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project *",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "name",
+          "viewName": "HealthCheck name",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035.",
+          "placeholder": "kaholo-health-check",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/httpHealthChecks"
+        },
+        {
+          "name": "type",
+          "viewName": "HealthCheck name",
+          "required": true,
+          "type": "string",
+          "description": "Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS or HTTP2. Exactly one of the protocol-specific health check field must be specified, which must match type field.",
+          "placeholder": "HTTP",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/httpHealthChecks"
+        }
+      ]
+    }
+  ]
+}

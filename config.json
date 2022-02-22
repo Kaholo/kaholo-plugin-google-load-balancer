@@ -30,28 +30,6 @@
       "description": "GCP Project defines how your app interacts with services and resources",
       "placeholder": "project-alpha",
       "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
-    },
-    {
-      "name": "region",
-      "viewName": "Default Region",
-      "type": "string",
-      "description": "Geographical GCP region where infrastructure is or will be located",
-      "placeholder": "us-east1",
-      "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
-    },
-    {
-      "name": "diskAutoDelete",
-      "viewName": "Default Disk Auto Delete",
-      "type": "boolean",
-      "description": "If checked, when the new VM is deleted the disk will be also",
-      "learnUrl": "https://cloud.google.com/compute/docs/disks/add-persistent-disk"
-    },
-    {
-      "name": "waitForOperation",
-      "viewName": "Default Wait For Operation End",
-      "type": "boolean",
-      "description": "If checked, wait for this action to complete before moving on to next action in pipeline.",
-      "learnUrl": "https://github.com/Kaholo/kaholo-plugin-GoogleCloudComputeEngine"
     }
   ],
   "methods": [
@@ -79,7 +57,7 @@
           "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
         },
         {
-          "name": "name",
+          "name": "healthCheckName",
           "viewName": "HealthCheck name",
           "required": true,
           "type": "string",
@@ -89,12 +67,61 @@
         },
         {
           "name": "type",
-          "viewName": "HealthCheck name",
+          "viewName": "HealthCheck type *",
           "required": true,
           "type": "string",
           "description": "Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS or HTTP2. Exactly one of the protocol-specific health check field must be specified, which must match type field.",
           "placeholder": "HTTP",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/httpHealthChecks"
+        },
+        {
+          "name": "backendServiceName",
+          "viewName": "Backend Service Name *",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035.",
+          "placeholder": "kaholo-backend-service",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices/"
+        },
+        {
+          "name": "zone",
+          "viewName": "Zone *",
+          "type": "autocomplete",
+          "required": true,
+          "autocompleteType": "function",
+          "functionName": "listZonesAuto",
+          "description": "Zone is a subdivision of GCP regions, typically region-a, b, or c",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
+        },
+        {
+          "name": "instanceGroupName",
+          "viewName": "Instance group URL",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listInstanceGroupsAuto",
+          "description": "URL of the instance group, e.g., https://www.googleapis.com/compute/v1/projects/project/zones/region/instanceGroups/instance-group ",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices/"
+        },
+        {
+          "name": "urlMapName",
+          "viewName": "urlMapName",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-url-map",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+        },
+        {
+          "name": "httpProxyName",
+          "viewName": "httpProxyName",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-http-proxy",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetHttpsProxies"
         }
       ]
     }

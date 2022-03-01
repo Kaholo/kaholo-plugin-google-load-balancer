@@ -34,8 +34,8 @@
   ],
   "methods": [
     {
-      "name": "createLoadBalancer",
-      "viewName": "Create Load Balancer",
+      "name": "createHttpExternalLoadBalancer",
+      "viewName": "Create HTTP External Load Balancer",
       "params": [
         {
           "name": "creds",
@@ -76,7 +76,7 @@
         },
         {
           "name": "backendServiceName",
-          "viewName": "Backend Service Name *",
+          "viewName": "Backend Service Name ",
           "required": true,
           "type": "string",
           "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035.",
@@ -122,6 +122,145 @@
           "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
           "placeholder": "kaholo-http-proxy",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetHttpsProxies"
+        },
+        {
+          "name": "forwardingRuleName",
+          "viewName": "forwardingRuleName",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-forward-rule",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalForwardingRules"
+        },
+        {
+          "name": "forwardRulePortRange",
+          "viewName": "forwardRulePortRange",
+          "required": true,
+          "type": "string",
+          "description": "Packets addressed to ports in the specified range will be forwarded to http proxy",
+          "placeholder": "kaholo-forward-rule",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalForwardingRules"
+        }
+      ]
+    },
+    {
+      "name": "createHttpsExternalLoadBalancer",
+      "viewName": "Create HTTPS External Load Balancer",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "healthCheckName",
+          "viewName": "Health check name",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035.",
+          "placeholder": "kaholo-health-check",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/httpHealthChecks"
+        },
+        {
+          "name": "type",
+          "viewName": "HealthCheck type ",
+          "required": true,
+          "type": "string",
+          "description": "Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS or HTTP2. Exactly one of the protocol-specific health check field must be specified, which must match type field.",
+          "placeholder": "HTTP",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/httpHealthChecks"
+        },
+        {
+          "name": "backendServiceName",
+          "viewName": "Backend service name ",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035.",
+          "placeholder": "kaholo-backend-service",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices/"
+        },
+        {
+          "name": "zone",
+          "viewName": "Zone",
+          "type": "autocomplete",
+          "required": true,
+          "autocompleteType": "function",
+          "functionName": "listZonesAuto",
+          "description": "Zone is a subdivision of GCP regions, typically region-a, b, or c",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
+        },
+        {
+          "name": "instanceGroupName",
+          "viewName": "Instance group URL",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listInstanceGroupsAuto",
+          "description": "Name of the instance group",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices/"
+        },
+        {
+          "name": "urlMapName",
+          "viewName": "urlMap Name",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-url-map",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+        },
+        {
+          "name": "httpsProxyName",
+          "viewName": "HTTPS proxy name",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-http-proxy",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetHttpsProxies"
+        },
+        {
+          "name": "sslCertificateName",
+          "viewName": "SSL certificate name",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listSSLCertificatesAuto",
+          "description": "Name of the SSL certificate",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates/insert"
+        },
+        {
+          "name": "forwardingRuleName",
+          "viewName": "Forwarding rule name",
+          "required": true,
+          "type": "string",
+          "description": "Name of the resource. The name must be 1-63 characters long, and comply with RFC1035. ",
+          "placeholder": "kaholo-forward-rule",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalForwardingRules"
+        },
+        {
+          "name": "forwardRulePortRange",
+          "viewName": "Forward rule port range",
+          "required": true,
+          "type": "string",
+          "description": "Packets addressed to ports in the specified range will be forwarded to http proxy",
+          "placeholder": "kaholo-forward-rule",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalForwardingRules"
         }
       ]
     }

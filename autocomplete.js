@@ -75,5 +75,5 @@ module.exports = {
   listProjectsAuto: listAuto("listProjects", ["projectId", "displayName"]),
   listZonesAuto: listAuto("listZones", ["name"]),
   listInstanceGroupsAuto: listAuto("listInstanceGroups", ["id", "name"]),
-  listHealthChecksAuto: listAuto("listHealthChecks", ["projectId", "displayName"]),
+  listSSLCertificatesAuto: listAuto("listSSLCertificates", ["id", "name"]),
 };

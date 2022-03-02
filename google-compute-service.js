@@ -60,6 +60,40 @@ module.exports = class GoogleComputeService {
     return response;
   }
 
+  async createHealthCheckFromJSON(action) {
+    const healthChecksClient = new GCCompute.HealthChecksClient({ credentials: this.credentials });
+
+    const healthCheckResource = action.params.healthCheckJSON;
+    const request = {
+      healthCheckResource,
+      project: this.projectId,
+    };
+
+    if (action.params.waitForOperation) {
+      const operationsClient = new GCCompute.GlobalOperationsClient(
+        { credentials: this.credentials },
+      );
+
+      let [operation] = await healthChecksClient.insert(request);
+      while (operation.status !== "DONE") {
+        // eslint-disable-next-line no-await-in-loop
+        [operation] = await operationsClient.wait({
+          operation: operation.name,
+          project: this.projectId,
+        });
+      }
+
+      const response = healthChecksClient.get({
+        healthCheck: action.params.healthCheckJSON.name,
+        project: this.projectId,
+      });
+
+      return response;
+    }
+    const response = await healthChecksClient.insert(request);
+    return response;
+  }
+
   async createBackendService(action) {
     const backendServiceClient = new GCCompute.BackendServicesClient(
       { credentials: this.credentials },
@@ -103,6 +137,43 @@ module.exports = class GoogleComputeService {
     return response;
   }
 
+  async createBackendServiceFromJSON(action) {
+    const backendServiceClient = new GCCompute.BackendServicesClient(
+      { credentials: this.credentials },
+    );
+
+    const backendServiceResource = action.params.backendServiceJSON;
+    const request = {
+      backendServiceResource,
+      project: this.projectId,
+    };
+
+    if (action.params.waitForOperation) {
+      const operationsClient = new GCCompute.GlobalOperationsClient(
+        { credentials: this.credentials },
+      );
+
+      let [operation] = await backendServiceClient.insert(request);
+      while (operation.status !== "DONE") {
+        // eslint-disable-next-line no-await-in-loop
+        [operation] = await operationsClient.wait({
+          operation: operation.name,
+          project: this.projectId,
+        });
+      }
+
+      const response = backendServiceClient.get({
+        backendService: action.params.backendServiceJSON.name,
+        project: this.projectId,
+      });
+
+      return response;
+    }
+
+    const response = await backendServiceClient.insert(request);
+    return response;
+  }
+
   async createUrlMap(action) {
     const urlMapServiceClient = new GCCompute.UrlMapsClient({ credentials: this.credentials });
     const operationsClient = new GCCompute.GlobalOperationsClient(
@@ -133,6 +204,40 @@ module.exports = class GoogleComputeService {
       project: this.projectId,
     });
 
+    return response;
+  }
+
+  async createURLMapFromJSON(action) {
+    const urlMapServiceClient = new GCCompute.UrlMapsClient({ credentials: this.credentials });
+    const urlMapResource = action.params.urlMapJSON;
+    const request = {
+      urlMapResource,
+      project: this.projectId,
+    };
+
+    if (action.params.waitForOperation) {
+      const operationsClient = new GCCompute.GlobalOperationsClient(
+        { credentials: this.credentials },
+      );
+
+      let [operation] = await urlMapServiceClient.insert(request);
+      while (operation.status !== "DONE") {
+        // eslint-disable-next-line no-await-in-loop
+        [operation] = await operationsClient.wait({
+          operation: operation.name,
+          project: this.projectId,
+        });
+      }
+
+      const response = urlMapServiceClient.get({
+        urlMap: action.params.urlMapJSON.name,
+        project: this.projectId,
+      });
+
+      return response;
+    }
+
+    const response = await urlMapServiceClient.insert(request);
     return response;
   }
 
@@ -181,10 +286,11 @@ module.exports = class GoogleComputeService {
       { credentials: this.credentials },
     );
 
+    const sslCertificateURL = await this.getSSLCertificateURL(action.params);
     const targetHttpsProxyResource = {
       name: action.params.httpsProxyName,
       urlMap: await this.getUrlMapURL(action.params),
-      sslCertificates: [await this.getSSLCertificateURL(action.params)],
+      sslCertificates: [sslCertificateURL],
     };
 
     const request = {
@@ -202,10 +308,46 @@ module.exports = class GoogleComputeService {
     }
 
     const response = await httpsProxyClient.get({
-      targetHttpProxy: action.params.httpsProxyName,
+      targetHttpsProxy: action.params.httpsProxyName,
       project: this.projectId,
     });
 
+    return response;
+  }
+
+  async createTargetHttpProxyFromJSON(action) {
+    const httpProxyClient = new GCCompute.TargetHttpProxiesClient(
+      { credentials: this.credentials },
+    );
+    const targetHttpProxyResource = action.params.targetHttpProxyJSON;
+    const request = {
+      targetHttpProxyResource,
+      project: this.projectId,
+    };
+
+    if (action.params.waitForOperation) {
+      const operationsClient = new GCCompute.GlobalOperationsClient(
+        { credentials: this.credentials },
+      );
+
+      let [operation] = await httpProxyClient.insert(request);
+      while (operation.status !== "DONE") {
+        // eslint-disable-next-line no-await-in-loop
+        [operation] = await operationsClient.wait({
+          operation: operation.name,
+          project: this.projectId,
+        });
+      }
+
+      const response = httpProxyClient.get({
+        targetHttpProxy: action.params.targetHttpProxyJSON.name,
+        project: this.projectId,
+      });
+
+      return response;
+    }
+
+    const response = await httpProxyClient.insert(request);
     return response;
   }
 
@@ -217,9 +359,13 @@ module.exports = class GoogleComputeService {
       { credentials: this.credentials },
     );
 
+    const target = action.params.httpProxyName
+      ? await this.getTargetHttpProxyURL(action.params)
+      : await this.getTargetHttpsProxyURL(action.params);
+
     const forwardingRuleResource = {
       name: action.params.forwardingRuleName,
-      target: await this.getTargetProxyURL(action.params),
+      target,
       portRange: action.params.forwardRulePortRange,
       loadBalancingScheme: "EXTERNAL",
     };
@@ -243,6 +389,43 @@ module.exports = class GoogleComputeService {
       project: this.projectId,
     });
 
+    return response;
+  }
+
+  async createForwardRulesFromJSON(action) {
+    const forwardingRulesClient = new GCCompute.GlobalForwardingRulesClient(
+      { credentials: this.credentials },
+    );
+
+    const forwardingRuleResource = action.params.forwardRulesJSON;
+    const request = {
+      forwardingRuleResource,
+      project: this.projectId,
+    };
+
+    if (action.params.waitForOperation) {
+      const operationsClient = new GCCompute.GlobalOperationsClient(
+        { credentials: this.credentials },
+      );
+
+      let [operation] = await forwardingRulesClient.insert(request);
+      while (operation.status !== "DONE") {
+        // eslint-disable-next-line no-await-in-loop
+        [operation] = await operationsClient.wait({
+          operation: operation.name,
+          project: this.projectId,
+        });
+      }
+
+      const response = forwardingRulesClient.get({
+        forwardingRule: action.params.forwardRulesJSON.name,
+        project: this.projectId,
+      });
+
+      return response;
+    }
+
+    const response = await forwardingRulesClient.insert(request);
     return response;
   }
 
@@ -436,7 +619,7 @@ module.exports = class GoogleComputeService {
     return res[0].selfLink;
   }
 
-  async getTargetProxyURL(params) {
+  async getTargetHttpProxyURL(params) {
     const httpProxyClient = new GCCompute.TargetHttpProxiesClient(
       { credentials: this.credentials },
     );
@@ -462,12 +645,38 @@ module.exports = class GoogleComputeService {
     return res[0].selfLink;
   }
 
+  async getTargetHttpsProxyURL(params) {
+    const httpsProxyClient = new GCCompute.TargetHttpsProxiesClient(
+      { credentials: this.credentials },
+    );
+
+    const targetHttpsProxy = params.httpsProxyName;
+
+    const request = {
+      targetHttpsProxy,
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await httpsProxyClient.get(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push(response);
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res[0].selfLink;
+  }
+
   async getSSLCertificateURL(params) {
     const sslCertificatesClient = new GCCompute.SslCertificatesClient(
       { credentials: this.credentials },
     );
 
-    const sslCertificate = params.sslCertificateName;
+    const sslCertificate = params.sslCertificateName.value;
 
     const request = {
       sslCertificate,
@@ -585,7 +794,7 @@ module.exports = class GoogleComputeService {
     );
 
     const request = {
-      targetHttpProxy: action.params.httpsProxyName,
+      targetHttpsProxy: action.params.httpsProxyName,
       project: this.projectId,
     };
 
@@ -661,7 +870,7 @@ module.exports = class GoogleComputeService {
         // eslint-disable-next-line no-await-in-loop
         await deleteLoadBalancerFunction(action, settings);
       } catch (err) {
-        console.error(err, "Rollback failed");
+        console.error(`${deleteLoadBalancerFunction.name} rollback failed: `, err);
       }
     }
   }

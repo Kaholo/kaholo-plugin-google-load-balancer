@@ -263,6 +263,216 @@
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalForwardingRules"
         }
       ]
+    },
+    {
+      "name": "createHealthCheckFromJSON",
+      "viewName": "Create health check From JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "healthCheckJSON",
+          "viewName": "health check JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing the health check to create. Can be declared in Code e.g. const myHealthCheck = {\"name\": \"healthCheck\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/healthCheck_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
+        }
+      ]
+    },
+    {
+      "name": "createBackendServiceFromJSON",
+      "viewName": "Create backend service from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "backendServiceJSON",
+          "viewName": "Backend service JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing the backend service to create. Can be declared in Code e.g. const myBackendService = {\"name\": \"backendService\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/backendService_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices"
+        }
+      ]
+    },
+    {
+      "name": "createURLMapFromJSON",
+      "viewName": "Create URL map from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "urlMapJSON",
+          "viewName": "Url map JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing the url map to create. Can be declared in Code e.g. const myUrlMap = {\"name\": \"urlMap\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/urlMap_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+        }
+      ]
+    },
+    {
+      "name": "createTargetHttpProxyFromJSON",
+      "viewName": "Create Target HTTP Proxy  from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetHttpProxyJSON",
+          "viewName": "Target Http Proxy JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing target Http Proxy create. Can be declared in Code e.g. const myUrlMap = {\"name\": \"myTargetHttpProxy\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/httpProxy_01.json",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createForwardRulesFromJSON",
+      "viewName": "Create Forward Rules from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "forwardRulesJSON",
+          "viewName": "Forward Rules JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing forward rules creation. Can be declared in Code e.g. const myUrlMap = {\"name\": \"myForwardRules\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/forwardRules_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/forwardingRules"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
     }
   ]
 }

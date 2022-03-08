@@ -1,107 +1,162 @@
-const GoogleComputeService = require("./google-compute-service");
+const GCCompute = require("@google-cloud/compute");
+require("./google-compute-service");
 const autocomplete = require("./autocomplete");
-
-async function createHttpExternalLoadBalancer(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-
-  const loadBalancerFunctions = [
-    computeClient.createHealthCheck.bind(computeClient),
-    computeClient.createBackendService.bind(computeClient),
-    computeClient.createUrlMap.bind(computeClient),
-    computeClient.createTargetHttpProxy.bind(computeClient),
-    computeClient.createForwardRules.bind(computeClient),
-  ];
-  const results = {
-    loadBalancer: {},
-  };
-  // eslint-disable-next-line no-restricted-syntax
-  for (const lbFunction of loadBalancerFunctions) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const result = (await lbFunction(action, settings))[0];
-      // The promise returned from load balancer function resolves to an array.
-      // The first element of the array is an object representing created resource.
-      const resultKind = result.kind;
-      results[resultKind] = result;
-    } catch (err) {
-      // eslint-disable-next-line no-await-in-loop
-      await computeClient.rollbackHttpExternalLB(results, action, settings);
-      throw err;
-    }
-  }
-
-  return results;
-}
+const {
+  createResource,
+} = require("./google-compute-lib");
+const {
+  runHttpExternalLoadBalancerCreation,
+  runHttpsExternalLoadBalancerCreation,
+} = require("./google-load-balancer-service");
 
 async function createHttpsExternalLoadBalancer(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
+  return runHttpsExternalLoadBalancerCreation(action, settings);
+}
 
-  const loadBalancerFunctions = [
-    computeClient.createHealthCheck.bind(computeClient),
-    computeClient.createBackendService.bind(computeClient),
-    computeClient.createUrlMap.bind(computeClient),
-    computeClient.createTargetHttpsProxy.bind(computeClient),
-    computeClient.createForwardRules.bind(computeClient),
-  ];
-  const results = {
-    loadBalancer: {},
-  };
-  // eslint-disable-next-line no-restricted-syntax
-  for (const lbFunction of loadBalancerFunctions) {
-    try {
-      // The first element of the array is an object representing created resource.
-      // eslint-disable-next-line no-await-in-loop
-      const result = (await lbFunction(action, settings))[0];
-      // The promise returned from load balancer function resolves to an array.
-
-      results.loadBalancer[result.kind] = result;
-    } catch (err) {
-      // eslint-disable-next-line no-await-in-loop
-      await computeClient.rollbackHttpsExternalLB(results, action, settings);
-      throw err;
-    }
-  }
-
-  return results;
+async function createHttpExternalLoadBalancer(action, settings) {
+  return runHttpExternalLoadBalancerCreation(action, settings);
 }
 
 async function createHealthCheckFromJSON(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-  const result = await computeClient.createHealthCheckFromJSON(action, settings);
-  return result;
+  const resource = { healthCheckResource: action.params.healthCheckJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.HealthChecksClient,
+    resource,
+  );
 }
 
 async function createBackendServiceFromJSON(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-  const result = await computeClient.createBackendServiceFromJSON(action, settings);
-  return result;
+  const resource = { backendServiceResource: action.params.backendServiceJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.BackendServicesClient,
+    resource,
+  );
 }
 
 async function createURLMapFromJSON(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-  const result = await computeClient.createURLMapFromJSON(action, settings);
-  return result;
+  const resource = { urlMapResource: action.params.urlMapJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.UrlMapsClient,
+    resource,
+  );
 }
 
 async function createTargetHttpProxyFromJSON(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-  const result = await computeClient.createTargetHttpProxyFromJSON(action, settings);
-  return result;
+  const resource = { targetHttpProxyResource: action.params.targetHttpProxyJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.TargetHttpProxiesClient,
+    resource,
+  );
 }
 
 async function createForwardRulesFromJSON(action, settings) {
-  const computeClient = GoogleComputeService.from(action.params, settings);
-  const result = await computeClient.createForwardRulesFromJSON(action, settings);
-  return result;
+  const resource = { forwardingRuleResource: action.params.forwardRulesJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.GlobalForwardingRulesClient,
+    resource,
+  );
+}
+
+async function createAddressFromJSON(action, settings) {
+  const resource = { addressResource: action.params.addressJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.AddressesClient,
+    resource,
+  );
+}
+
+async function createBackendBucketFromJSON(action, settings) {
+  const resource = { backendBucketResource: action.params.backendBucketJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.BackendBucketsClient,
+    resource,
+  );
+}
+
+async function createSslCertificateFromJSON(action, settings) {
+  const resource = { sslCertificateResource: action.params.sslCertificateJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.SslCertificatesClient,
+    resource,
+  );
+}
+
+async function createSslPolicyFromJSON(action, settings) {
+  const resource = { sslPolicyResource: action.params.sslPolicyJSON };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.SslPoliciesClient,
+    resource,
+  );
+}
+
+async function createTargetInstanceFromJSON(action, settings) {
+  const resource = {
+    targetInstanceResource: action.params.targetInstanceJSON,
+    zone: action.params.zone,
+  };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.SslPoliciesClient,
+    resource,
+  );
+}
+
+async function createTargetPoolFromJSON(action, settings) {
+  const resource = {
+    targetPoolResource: action.params.targetPoolJSON,
+    region: action.params.region,
+  };
+
+  return createResource(
+    action.params,
+    settings,
+    GCCompute.TargetPoolsClient,
+    resource,
+  );
 }
 
 module.exports = {
-  createHttpExternalLoadBalancer,
-  createHttpsExternalLoadBalancer,
   createHealthCheckFromJSON,
   createBackendServiceFromJSON,
   createURLMapFromJSON,
   createTargetHttpProxyFromJSON,
   createForwardRulesFromJSON,
+  createAddressFromJSON,
+  createBackendBucketFromJSON,
+  createSslCertificateFromJSON,
+  createSslPolicyFromJSON,
+  createTargetInstanceFromJSON,
+  createTargetPoolFromJSON,
+  createHttpExternalLoadBalancer,
+  createHttpsExternalLoadBalancer,
   ...autocomplete,
 };

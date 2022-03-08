@@ -51,8 +51,8 @@ function listAuto(listFunc, fields = ["id", "name"]) {
   const parseFunc = getParseFromParam(...fields);
 
   return async (query, pluginSettings, triggerParameters) => {
-    const settings = mapAutoParams(pluginSettings); const
-      params = mapAutoParams(triggerParameters);
+    const settings = mapAutoParams(pluginSettings);
+    const params = mapAutoParams(triggerParameters);
     const client = GoogleComputeService.from(params, settings);
 
     const items = [];
@@ -75,5 +75,6 @@ module.exports = {
   listProjectsAuto: listAuto("listProjects", ["projectId", "displayName"]),
   listZonesAuto: listAuto("listZones", ["name"]),
   listInstanceGroupsAuto: listAuto("listInstanceGroups", ["id", "name"]),
-  listSSLCertificatesAuto: listAuto("listSSLCertificates", ["id", "name"]),
+  listHealthChecksAuto: listAuto("listHealthChecks", ["projectId", "displayName"]),
+  listSSLCertificatesAuto: listAuto("listSSLCertificates"),
 };

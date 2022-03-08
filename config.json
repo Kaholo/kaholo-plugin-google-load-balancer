@@ -307,6 +307,48 @@
       ]
     },
     {
+      "name": "createHealthCheckFromJSON2",
+      "viewName": "Create health check From JSON 2",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "healthCheckJSON",
+          "viewName": "health check JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing the health check to create. Can be declared in Code e.g. const myHealthCheck = {\"name\": \"healthCheck\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/healthCheck_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
+        }
+      ]
+    },
+    {
       "name": "createBackendServiceFromJSON",
       "viewName": "Create backend service from JSON",
       "params": [

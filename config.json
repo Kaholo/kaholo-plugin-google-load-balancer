@@ -302,7 +302,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -344,7 +344,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -386,7 +386,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -428,7 +428,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -470,7 +470,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -512,7 +512,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -554,7 +554,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -596,7 +596,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -638,7 +638,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -680,7 +680,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     },
@@ -722,7 +722,7 @@
           "required": false,
           "type": "boolean",
           "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
         }
       ]
     }

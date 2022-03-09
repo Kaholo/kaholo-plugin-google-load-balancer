@@ -75,6 +75,12 @@ module.exports = {
   listProjectsAuto: listAuto("listProjects", ["projectId", "displayName"]),
   listZonesAuto: listAuto("listZones", ["name"]),
   listInstanceGroupsAuto: listAuto("listInstanceGroups", ["id", "name"]),
-  listHealthChecksAuto: listAuto("listHealthChecks", ["projectId", "displayName"]),
+  listHealthChecksAuto: listAuto("listHealthChecks", ["id", "name"]),
   listSSLCertificatesAuto: listAuto("listSSLCertificates"),
+  listBackendServicesAuto: listAuto("listBackendServices", ["id", "name"]),
+  listUrlMapsAuto: listAuto("listUrlMaps", ["id", "name"]),
+  listTargetHttpProxyAuto: listAuto("listTargetHttpProxy", ["id", "name"]),
+  listTargetHttpsProxyAuto: listAuto("listTargetHttpsProxy", ["id", "name"]),
+  listForwardingRulesAuto: listAuto("listForwardingRules", ["id", "name"]),
+
 };

@@ -433,6 +433,48 @@
       ]
     },
     {
+      "name": "createTargetHttpsProxyFromJSON",
+      "viewName": "Create Target HTTPS Proxy  from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetHttpsProxyJSON",
+          "viewName": "Target Https Proxy JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing target Http Proxy create. Can be declared in Code e.g. const myUrlMap = {\"name\": \"myTargetHttpProxy\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/httpProxy_01.json",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
       "name": "createForwardRulesFromJSON",
       "viewName": "Create Forward Rules from JSON",
       "params": [
@@ -715,6 +757,270 @@
           "description": "A JSON document describing certificate creation. Can be declared in Code e.g. const myTargetPool = {\"name\": \"myTargetPool\", ...} or a path to a JSON document on the Kaholo agent.",
           "placeholder": "/home/node/targetPool_01.json",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetPools"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteHealthCheck",
+      "viewName": "Delete healthCheck",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "healthCheckName",
+          "viewName": "Health check",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listHealthChecksAuto",
+          "description": "Health check resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/load-balancing/docs/health-checks"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteBackendService",
+      "viewName": "Delete backend service",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "backendServiceName",
+          "viewName": "Backend service",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBackendServicesAuto",
+          "description": "Backend service resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendServices"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteUrlMap",
+      "viewName": "Delete URL map",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "urlMapName",
+          "viewName": "URL map",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listUrlMapsAuto",
+          "description": "URL map resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteTargetHttpProxy",
+      "viewName": "Delete Target HTTP Proxy",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetHttpProxyName",
+          "viewName": "Target HTTP Proxy",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listTargetHttpProxyAuto",
+          "description": "Target HTTP proxy resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetHttpProxies"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteTargetHttpsProxy",
+      "viewName": "Delete Target HTTPS Proxy",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetHttpsProxyName",
+          "viewName": "Target HTTPS Proxy",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listTargetHttpsProxyAuto",
+          "description": "Target HTTPS proxy resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetHttpsProxies"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteForwardingRules",
+      "viewName": "Delete forwarding rules",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "forwardingRuleName",
+          "viewName": "Forwarding rule",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listForwardingRulesAuto",
+          "description": "Forwarding rules resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/forwardingRules"
         },
         {
           "name": "waitForOperation",

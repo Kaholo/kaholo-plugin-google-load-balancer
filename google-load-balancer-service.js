@@ -15,6 +15,7 @@ function createHealthCheckResource(action) {
     },
   };
 }
+
 async function createBackendServiceResource(action, settings) {
   const backendServiceResource = {
     backendServiceResource: {
@@ -47,6 +48,7 @@ async function createBackendServiceResource(action, settings) {
   };
   return backendServiceResource;
 }
+
 async function createUrlMapResource(action, settings) {
   const urlMapResource = {
     urlMapResource: {
@@ -63,6 +65,7 @@ async function createUrlMapResource(action, settings) {
   };
   return urlMapResource;
 }
+
 async function createTargetHttpProxyResource(action, settings) {
   const targetHttpProxyResource = {
     targetHttpProxyResource:
@@ -80,6 +83,7 @@ async function createTargetHttpProxyResource(action, settings) {
   };
   return targetHttpProxyResource;
 }
+
 async function createTargetHttpsProxyResource(action, settings) {
   const sslCertificateURL = (await getResource(
     action.params,
@@ -107,6 +111,7 @@ async function createTargetHttpsProxyResource(action, settings) {
   };
   return targetHttpsProxyResource;
 }
+
 async function createForwardingRuleResource(action, settings) {
   let target;
   if (action.params.httpProxyName) {
@@ -219,7 +224,7 @@ async function runHttpsExternalLoadBalancerCreation(action, settings) {
     { client: GCCompute.HealthChecksClient, createResourceFunc: createHealthCheckResource, typeProperty: "healthCheck" },
     { client: GCCompute.BackendServicesClient, createResourceFunc: createBackendServiceResource, typeProperty: "backendService" },
     { client: GCCompute.UrlMapsClient, createResourceFunc: createUrlMapResource, typeProperty: "urlMap" },
-    { client: GCCompute.TargetHttpsProxiesClient, resource: createTargetHttpsProxyResource, typeProperty: "targetHttpsProxy" },
+    { client: GCCompute.TargetHttpsProxiesClient, createResourceFunc: createTargetHttpsProxyResource, typeProperty: "targetHttpsProxy" },
     { client: GCCompute.GlobalForwardingRulesClient, createResourceFunc: createForwardingRuleResource, typeProperty: "forwardingRule" },
   ];
   const result = await createGCPServices(loadBalancerResourcesData, action, settings);

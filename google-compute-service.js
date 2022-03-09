@@ -120,4 +120,142 @@ module.exports = class GoogleComputeService {
     }
     return res;
   }
+
+  async listHealthChecks() {
+    const client = new GCCompute.HealthChecksClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listBackendServices() {
+    const client = new GCCompute.BackendServicesClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listUrlMaps() {
+    const client = new GCCompute.UrlMapsClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listTargetHttpProxy() {
+    const client = new GCCompute.TargetHttpProxiesClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listTargetHttpsProxy() {
+    const client = new GCCompute.TargetHttpsProxiesClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listForwardingRules() {
+    const client = new GCCompute.GlobalForwardingRulesClient({
+      credentials: this.credentials,
+    });
+
+    const request = {
+      project: this.projectId,
+    };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
 };

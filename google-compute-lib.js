@@ -50,6 +50,10 @@ async function callGet(client, request) {
   return _.partial(callMethod, "get")(client, request);
 }
 
+async function callListAsync(client, request) {
+  return _.partial(callMethod, "listAsync")(client, request);
+}
+
 async function callDelete(client, request, waitForOperation = false) {
   return _.partial(callMethod, "delete")(client, request, waitForOperation);
 }
@@ -108,6 +112,26 @@ async function deleteResourceWaitForDeletion(params, settings, clientClass, reso
   return deleteResource(paramsWithWaitForOperation, settings, clientClass, resource);
 }
 
+async function listResources(params, settings, clientClass, resource) {
+  const credentials = getCredentials(params, settings);
+  const project = getProject(params, settings);
+  const authorizedClient = getAuthorizedClient(clientClass, credentials);
+
+  const request = _.merge({ project }, resource);
+
+  const res = [];
+  const iterable = await callListAsync(authorizedClient, request);
+
+  try {
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const response of iterable) {
+      res.push({ id: response.id, name: response.name });
+    }
+  } catch (err) {
+    return Promise.reject(err);
+  }
+  return res;
+}
 
 module.exports = {
   createResource,
@@ -115,4 +139,5 @@ module.exports = {
   getResource,
   deleteResource,
   deleteResourceWaitForDeletion,
+  listResources,
 };

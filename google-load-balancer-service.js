@@ -3,12 +3,8 @@ const _ = require("lodash");
 const {
   getResource,
   createResourceWaitForCreation,
-  deleteResource,
   deleteResourceWaitForDeletion,
 } = require("./google-compute-lib");
-const parsers = require("./parsers");
-const { removeUndefinedAndEmpty } = require("./helpers");
-const { ProjectsClient } = require("@google-cloud/resource-manager");
 
 function createHealthCheckResource(action) {
   return {
@@ -228,100 +224,6 @@ async function runHttpsExternalLoadBalancerCreation(action, settings) {
   ];
   const result = await createGCPServices(loadBalancerResourcesData, action, settings);
   return result;
-}
-
-async function listProjects(params) {
-  const projectsClient = new ProjectsClient({ credentials: this.credentials });
-  const { query } = params;
-
-  const request = removeUndefinedAndEmpty({
-    query: query ? `name:*${query}*` : undefined,
-  });
-
-  const iterable = projectsClient.searchProjectsAsync(request);
-  const res = [];
-
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const proj of iterable) {
-      res.push(proj);
-    }
-  } catch (error) {
-    return Promise.reject(error);
-  }
-
-  return res;
-}
-
-async function listZones(params) {
-  const zonesClient = new GCCompute.ZonesClient({ credentials: this.credentials });
-  const region = parsers.autocomplete(params.region);
-
-  const request = removeUndefinedAndEmpty({
-    project: this.projectId,
-  });
-
-  const iterable = zonesClient.listAsync(request);
-  const res = [];
-
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const zone of iterable) {
-      res.push(zone);
-    }
-  } catch (error) {
-    return Promise.reject(error);
-  }
-
-  return res.filter((zone) => !region || zone.name.includes(region));
-}
-
-async function listInstanceGroups(params) {
-  const instanceGroupsClient = new GCCompute.InstanceGroupsClient({
-    credentials: this.credentials,
-  });
-
-  const request = {
-    project: this.projectId,
-    zone: params.zone,
-  };
-
-  const res = [];
-  const iterable = await instanceGroupsClient.listAsync(request);
-
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const response of iterable) {
-      res.push({ id: response.id, name: response.name });
-    }
-  } catch (err) {
-    return Promise.reject(err);
-  }
-  return res;
-}
-
-async function listSSLCertificates(params) {
-  const sslCertificatesClient = new GCCompute.SslCertificatesClient({
-    credentials: this.credentials,
-  });
-
-  const request = {
-    project: this.projectId,
-    zone: params.zone,
-  };
-
-  const res = [];
-  const iterable = await sslCertificatesClient.listAsync(request);
-
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const response of iterable) {
-      res.push({ id: response.id, name: response.name });
-    }
-  } catch (err) {
-    return Promise.reject(err);
-  }
-  return res;
 }
 
 module.exports = {

@@ -307,48 +307,6 @@
       ]
     },
     {
-      "name": "createHealthCheckFromJSON2",
-      "viewName": "Create health check From JSON 2",
-      "params": [
-        {
-          "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
-          "type": "vault",
-          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
-          "learnUrl": "https://cloud.google.com/docs/authentication/production"
-        },
-        {
-          "name": "project",
-          "viewName": "Project",
-          "required": false,
-          "type": "autocomplete",
-          "autocompleteType": "function",
-          "functionName": "listProjectsAuto",
-          "description": "GCP Project defines how your app interacts with services and resources",
-          "placeholder": "select using autocomplete",
-          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
-        },
-        {
-          "name": "healthCheckJSON",
-          "viewName": "health check JSON",
-          "required": true,
-          "type": "text",
-          "description": "A JSON document describing the health check to create. Can be declared in Code e.g. const myHealthCheck = {\"name\": \"healthCheck\", ...} or a path to a JSON document on the Kaholo agent.",
-          "placeholder": "/home/node/healthCheck_01.json",
-          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
-        },
-        {
-          "name": "waitForOperation",
-          "viewName": "Wait For Operation End",
-          "required": false,
-          "type": "boolean",
-          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
-          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks"
-        }
-      ]
-    },
-    {
       "name": "createBackendServiceFromJSON",
       "viewName": "Create backend service from JSON",
       "params": [
@@ -505,6 +463,258 @@
           "description": "A JSON document describing forward rules creation. Can be declared in Code e.g. const myUrlMap = {\"name\": \"myForwardRules\", ...} or a path to a JSON document on the Kaholo agent.",
           "placeholder": "/home/node/forwardRules_01.json",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/forwardingRules"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createAddressFromJSON",
+      "viewName": "Create Addresses from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "addressJSON",
+          "viewName": "Address JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing Address creation. Can be declared in Code e.g. const myAddress = {\"name\": \"myAddress\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/Address_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/addresses"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createBackendBucketFromJSON",
+      "viewName": "Create Backend Bucket from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "backendBucketJSON",
+          "viewName": "Backend bucket JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing bucket creation. Can be declared in Code e.g. const myBucket = {\"name\": \"mybucket\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/bucket_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendBuckets"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createSslCertificateFromJSON",
+      "viewName": "Create SSL certificate from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "sslCertificateJSON",
+          "viewName": "SSL certificate JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing certificate creation. Can be declared in Code e.g. const myCert = {\"name\": \"myCert\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/certificate_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createSslPolicyFromJSON",
+      "viewName": "Create SSL policy from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "sslPolicyJSON",
+          "viewName": "SSL policy JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing certificate creation. Can be declared in Code e.g. const myPolicy = {\"name\": \"myPolicy\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/certificate_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslPolicies"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createTargetInstanceFromJSON",
+      "viewName": "Create target instance from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetInstanceJSON",
+          "viewName": "Target instance JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing certificate creation. Can be declared in Code e.g. const myTargetInstance = {\"name\": \"myTargetInstance\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/targetInstance_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetInstances"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/nodejs/docs/reference/compute/latest/compute/v1.targethttpproxiesclient"
+        }
+      ]
+    },
+    {
+      "name": "createTargetPoolFromJSON",
+      "viewName": "Create target pool from JSON",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "targetPoolJSON",
+          "viewName": "Target pool JSON",
+          "required": true,
+          "type": "text",
+          "description": "A JSON document describing certificate creation. Can be declared in Code e.g. const myTargetPool = {\"name\": \"myTargetPool\", ...} or a path to a JSON document on the Kaholo agent.",
+          "placeholder": "/home/node/targetPool_01.json",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetPools"
         },
         {
           "name": "waitForOperation",

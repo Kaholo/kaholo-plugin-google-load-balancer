@@ -2,6 +2,7 @@ const GCCompute = require("@google-cloud/compute");
 const { ProjectsClient } = require("@google-cloud/resource-manager");
 const parsers = require("./parsers");
 const { removeUndefinedAndEmpty } = require("./helpers");
+const _ = require("lodash");
 
 module.exports = class GoogleComputeService {
   /**
@@ -244,6 +245,27 @@ module.exports = class GoogleComputeService {
     const request = {
       project: this.projectId,
     };
+
+    const res = [];
+    const iterable = await client.listAsync(request);
+
+    try {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const response of iterable) {
+        res.push({ id: response.id, name: response.name });
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return res;
+  }
+
+  async listForwardingRules2(ClientClass, credentials, project, resource = {} ) {
+    const client = new ClientClass({
+      credentials,
+    });
+
+    const request = _.merge({ project }, resource);
 
     const res = [];
     const iterable = await client.listAsync(request);

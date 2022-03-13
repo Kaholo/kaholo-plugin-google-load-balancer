@@ -1,86 +1,22 @@
-const parsers = require("./parsers");
-const GoogleComputeService = require("./google-compute-service");
+require("lodash");
+const GCCompute = require("@google-cloud/compute");
 
-// auto complete helper methods
-
-const MAX_RESULTS = 100;
-
-function mapAutoParams(autoParams) {
-  const params = {};
-  autoParams.forEach((param) => {
-    params[param.name] = parsers.autocomplete(param.value);
-  });
-  return params;
-}
-
-function getAutoResult(id, value) {
-  return {
-    id: id || value,
-    value: value || id,
-  };
-}
-
-function getParseFromParam(idParamName, valParamName) {
-  if (valParamName) { return (item) => getAutoResult(item[idParamName], item[valParamName]); }
-  return (item) => getAutoResult(item[idParamName]);
-}
-
-function filterItems(items, query) {
-  const itemsResult = items;
-  if (query) {
-    const qWords = query.split(/[. ]/g).map((word) => word.toLowerCase()); // split by '.' or ' ' and make lower case
-    itemsResult.filter((item) => qWords.every((word) => item.value.toLowerCase().includes(word)));
-    itemsResult.sort(
-      (w1, w2) => w2.value.toLowerCase().indexOf(qWords[0])
-        - w1.value.toLowerCase().indexOf(qWords[0]),
-    );
-  }
-  return itemsResult.splice(0, MAX_RESULTS);
-}
-
-/** *
- * @returns {[{id, value}]} filtered result items
- ** */
-function handleResult(result, query, parseFunc) {
-  const items = result.map(parseFunc);
-  return filterItems(items, query);
-}
-
-// HOF to generate autocomplete
-function listAuto(listFunc, fields = ["id", "name"]) {
-  const parseFunc = getParseFromParam(...fields);
-
-  return async (query, pluginSettings, triggerParameters) => {
-    const settings = mapAutoParams(pluginSettings);
-    const params = mapAutoParams(triggerParameters);
-    const client = GoogleComputeService.from(params, settings);
-
-    const items = [];
-
-    params.query = (query || "").trim();
-
-    try {
-      const result = await client[listFunc](params, fields);
-
-      items.push(...handleResult(result.items || result, params.query, parseFunc));
-
-      return items;
-    } catch (err) {
-      throw new Error(`Problem with '${client}': ${err}`);
-    }
-  };
-}
+const {
+  createListProjectsFunction,
+  createListZonesFunction,
+  createListItemsFunction,
+} = require("./google-compute-lib");
 
 module.exports = {
-  listProjectsAuto: listAuto("listProjects", ["projectId", "displayName"]),
-  listZonesAuto: listAuto("listZones", ["name"]),
-  listInstanceGroupsAuto: listAuto("listInstanceGroups", ["id", "name"]),
-  listHealthChecksAuto: listAuto("listHealthChecks", ["id", "name"]),
-  listSSLCertificatesAuto: listAuto("listSSLCertificates"),
-  listBackendServicesAuto: listAuto("listBackendServices", ["id", "name"]),
-  listUrlMapsAuto: listAuto("listUrlMaps", ["id", "name"]),
-  listTargetHttpProxyAuto: listAuto("listTargetHttpProxy", ["id", "name"]),
-  listTargetHttpsProxyAuto: listAuto("listTargetHttpsProxy", ["id", "name"]),
-  listForwardingRulesAuto: listAuto("listForwardingRules", ["id", "name"]),
+  listProjectsAuto: createListProjectsFunction(),
+  listZonesAuto: createListZonesFunction(),
+  listInstanceGroupsAuto: createListItemsFunction(GCCompute.InstanceGroupsClient, ["id", "name"]),
+  listHealthChecksAuto: createListItemsFunction(GCCompute.HealthChecksClient, ["id", "name"]),
+  listSSLCertificatesAuto: createListItemsFunction(GCCompute.SslCertificatesClient, ["id", "name"]),
+  listBackendServicesAuto: createListItemsFunction(GCCompute.BackendServicesClient, ["id", "name"]),
+  listUrlMapsAuto: createListItemsFunction(GCCompute.UrlMapsClient, ["id", "name"]),
+  listTargetHttpProxyAuto: createListItemsFunction(GCCompute.TargetHttpProxiesClient, ["id", "name"]),
+  listTargetHttpsProxyAuto: createListItemsFunction(GCCompute.TargetHttpsProxiesClient, ["id", "name"]),
+  listForwardingRulesAuto: createListItemsFunction(GCCompute.GlobalForwardingRulesClient, ["id", "name"]),
 
 };

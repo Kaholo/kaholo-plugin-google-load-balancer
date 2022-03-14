@@ -85,7 +85,7 @@
         },
         {
           "name": "zone",
-          "viewName": "Zone *",
+          "viewName": "Zone",
           "type": "autocomplete",
           "required": true,
           "autocompleteType": "function",
@@ -1021,6 +1021,292 @@
           "description": "Forwarding rules resource to delete",
           "placeholder": "select using autocomplete",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/forwardingRules"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteAddress",
+      "viewName": "Delete address",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "addressName",
+          "viewName": "Address",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listAddressesAuto",
+          "description": "Address resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/forwardingRules"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteBackendBucket",
+      "viewName": "Delete backend bucket",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "backendBucketName",
+          "viewName": "Backend bucket",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBackendBucketsAuto",
+          "description": "Backend bucket resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/backendBuckets"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteSslCertificate",
+      "viewName": "Delete SLL certificate",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "sslCertificateName",
+          "viewName": "SSL Certificate",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listSslCertificatesAuto",
+          "description": "SSL Certificate resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteSslPolicy",
+      "viewName": "Delete SSL Policy",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listSslPoliciesAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "sslPolicyName",
+          "viewName": "SSL Policy",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listAddressesAuto",
+          "description": "SSL policy resource to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslPolicies"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteTargetInstance",
+      "viewName": "Delete Target Instance",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "zone",
+          "viewName": "Zone",
+          "type": "autocomplete",
+          "required": true,
+          "autocompleteType": "function",
+          "functionName": "listZonesAuto",
+          "description": "Zone is a subdivision of GCP regions, typically region-a, b, or c",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
+        },
+        {
+          "name": "targetInstanceName",
+          "viewName": "Target instance",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listTargetInstancesAuto",
+          "description": "Target instance to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetInstances"
+        },
+        {
+          "name": "waitForOperation",
+          "viewName": "Wait For Operation End",
+          "required": false,
+          "type": "boolean",
+          "description": "Wait until the operation is completed before moving onto the next Action in the pipeline.",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/globalOperations/wait"
+        }
+      ]
+    },
+    {
+      "name": "deleteTargetPool",
+      "viewName": "Delete Target Pool",
+      "params": [
+        {
+          "name": "creds",
+          "viewName": "Service Account Credentials *",
+          "required": false,
+          "type": "vault",
+          "description": "Vaulted JSON document containing service account credentials as provided by GCP",
+          "learnUrl": "https://cloud.google.com/docs/authentication/production"
+        },
+        {
+          "name": "project",
+          "viewName": "Project",
+          "required": false,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listProjectsAuto",
+          "description": "GCP Project defines how your app interacts with services and resources",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+        },
+        {
+          "name": "region",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "required": true,
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto",
+          "description": "GCP Region",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
+        },
+        {
+          "name": "targetPoolName",
+          "viewName": "Target pool",
+          "required": true,
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listTargetPoolsAuto",
+          "description": "Target pool to delete",
+          "placeholder": "select using autocomplete",
+          "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/targetInstances"
         },
         {
           "name": "waitForOperation",

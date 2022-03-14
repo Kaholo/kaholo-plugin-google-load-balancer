@@ -4,19 +4,14 @@ require("@google-cloud/compute");
 const { ProjectsClient } = require("@google-cloud/resource-manager");
 const GCCompute = require("@google-cloud/compute");
 const parsers = require("./parsers");
-
-function getCredentials(params, settings) {
-  const creds = parsers.object(params.creds || settings.creds);
-  if (!creds) {
-    throw new Error("Must provide credentials to call any method in the plugin!");
-  }
-  return creds;
-}
-
-function getProject(params, settings) {
-  const project = parsers.autocomplete(params.project || settings.project) || undefined;
-  return project;
-}
+const {
+  getParseFromParam,
+  mapAutoParams,
+  getCredentials,
+  getProject,
+  getRegion,
+  getZone,
+} = require("./helpers");
 
 function getAuthorizedClient(ClientClass, credentials) {
   const clientInstance = new ClientClass({ credentials });
@@ -84,20 +79,6 @@ async function createResourceWaitForCreation(params, settings, clientClass, reso
   return createResource(paramsWithWaitForOperation, settings, clientClass, resource);
 }
 
-async function getResource(params, settings, clientClass, resource) {
-  const credentials = getCredentials(params, settings);
-  const project = getProject(params, settings);
-  const authorizedClient = getAuthorizedClient(clientClass, credentials);
-
-  const request = _.merge({ project }, resource);
-
-  const result = await callGet(
-    authorizedClient,
-    request,
-  );
-  return result[0];
-}
-
 async function deleteResource(params, settings, clientClass, resource) {
   const credentials = getCredentials(params, settings);
   const project = getProject(params, settings);
@@ -118,12 +99,28 @@ async function deleteResourceWaitForDeletion(params, settings, clientClass, reso
   return deleteResource(paramsWithWaitForOperation, settings, clientClass, resource);
 }
 
-async function listResources(params, settings, clientClass, resource = {}) {
+async function getResource(params, settings, clientClass, resource) {
   const credentials = getCredentials(params, settings);
   const project = getProject(params, settings);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project }, resource);
+
+  const result = await callGet(
+    authorizedClient,
+    request,
+  );
+  return result[0];
+}
+
+async function listResources(params, settings, clientClass, resource = {}) {
+  const credentials = getCredentials(params, settings);
+  const project = getProject(params, settings);
+  const region = getRegion(params);
+  const zone = getZone(params);
+  const authorizedClient = getAuthorizedClient(clientClass, credentials);
+
+  const request = _.merge({ project, region, zone }, resource);
 
   const res = [];
   const iterable = await callListAsync(authorizedClient, request);
@@ -139,14 +136,10 @@ async function listResources(params, settings, clientClass, resource = {}) {
   return res;
 }
 
-async function listProjects(params, settings) {
+async function searchProjects(params, settings) {
   const credentials = getCredentials(params, settings);
   const authorizedClient = getAuthorizedClient(ProjectsClient, credentials);
   const { query } = params;
-
-  // const request = removeUndefinedAndEmpty({
-  //   query: query ? `name:*${query}*` : undefined,
-  // });
 
   const request = { query: query ? `name:*${query}*` : undefined };
 
@@ -165,34 +158,12 @@ async function listProjects(params, settings) {
   return res;
 }
 
-function autocomplete(value) {
-  if (_.isNil(value)) { return ""; }
-  if (_.isString(value)) { return value; }
-  if (_.isObject(value) && _.has(value, "id")) { return value.id; }
-  throw new Error(`Value "${value}" is not a valid autocomplete result nor string.`);
-}
-
-function mapAutoParams(autoParams) {
-  const params = {};
-  autoParams.forEach((param) => {
-    params[param.name] = autocomplete(param.value);
-  });
-  return params;
-}
-
-function getParseFromParam(idParamName, valParamName) {
-  return (item) => ({
-    id: item[idParamName],
-    value: item[valParamName] || item[idParamName],
-  });
-}
-
 async function getProjects(fields, pluginSettings, pluginParams) {
   const parseFunc = getParseFromParam(...fields);
   const settings = mapAutoParams(pluginSettings);
   const params = mapAutoParams(pluginParams);
 
-  let result = await listProjects(params, settings);
+  let result = await searchProjects(params, settings);
   result = [...result.map(parseFunc)];
   return { params, result };
 }
@@ -214,32 +185,33 @@ function createListItemsFunction(clientClass, fields) {
   };
 }
 
-function createListZonesFunction() {
-  return async function listGcpItems(query, pluginSettings, pluginParams) {
-    const { result, params } = await getListResults(["name"], pluginSettings, pluginParams, GCCompute.ZonesClient);
-
-    const region = autocomplete(params.region);
-    result.filter((zone) => !region || zone.name.includes(region));
-
-    return result;
-  };
+async function listGcpProjects(query, pluginSettings, pluginParams) {
+  const { result } = await getProjects(["projectId", "displayName"], pluginSettings, pluginParams);
+  return result;
 }
 
-function createListProjectsFunction() {
-  return async function listGcpProjects(query, pluginSettings, pluginParams) {
-    const { result } = await getProjects(["projectId", "displayName"], pluginSettings, pluginParams);
-    return result;
-  };
+async function listGcpRegions(query, pluginSettings, pluginParams) {
+  const { result } = await getListResults(["name"], pluginSettings, pluginParams, GCCompute.RegionsClient);
+  return result;
+}
+
+async function listGcpZones(query, pluginSettings, pluginParams) {
+  const { result, params } = await getListResults(["name"], pluginSettings, pluginParams, GCCompute.ZonesClient);
+
+  const region = parsers.autocomplete(params.region);
+  result.filter((zone) => !region || zone.name.includes(region));
+
+  return result;
 }
 
 module.exports = {
   createListItemsFunction,
-  createListZonesFunction,
-  createListProjectsFunction,
   createResource,
   createResourceWaitForCreation,
   deleteResource,
   deleteResourceWaitForDeletion,
   getResource,
-  listResources,
+  listGcpProjects,
+  listGcpRegions,
+  listGcpZones,
 };

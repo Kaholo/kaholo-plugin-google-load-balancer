@@ -1,5 +1,4 @@
 const GCCompute = require("@google-cloud/compute");
-require("./google-compute-service");
 const autocomplete = require("./autocomplete");
 const {
   createResource,
@@ -228,6 +227,80 @@ async function deleteForwardingRules(action, settings) {
   );
 }
 
+async function deleteAddress(action, settings) {
+  const resource = {
+    address: action.params.addressName.value,
+
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.AddressesClient,
+    resource,
+  );
+}
+
+async function deleteBackendBucket(action, settings) {
+  const resource = {
+    backendBucket: action.params.backendBucketName.value,
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.BackendBucketsClient,
+    resource,
+  );
+}
+
+async function deleteSslCertificate(action, settings) {
+  const resource = {
+    sslCertificate: action.params.sslCertificateName.value,
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.SslCertificatesClient,
+    resource,
+  );
+}
+
+async function deleteSslPolicy(action, settings) {
+  const resource = {
+    sslPolicy: action.params.sslPolicyName.value,
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.SslPoliciesClient,
+    resource,
+  );
+}
+
+async function deleteTargetInstance(action, settings) {
+  const resource = {
+    targetInstance: action.params.targetInstanceName.value,
+    zone: action.params.zone.value,
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.TargetInstancesClient,
+    resource,
+  );
+}
+
+async function deleteTargetPool(action, settings) {
+  const resource = {
+    targetPool: action.params.targetPoolName.value,
+  };
+  return deleteResource(
+    action.params,
+    settings,
+    GCCompute.TargetPoolsClient,
+    resource,
+  );
+}
+
 module.exports = {
   createHealthCheckFromJSON,
   createBackendServiceFromJSON,
@@ -249,5 +322,11 @@ module.exports = {
   deleteTargetHttpProxy,
   deleteTargetHttpsProxy,
   deleteForwardingRules,
+  deleteAddress,
+  deleteBackendBucket,
+  deleteSslCertificate,
+  deleteSslPolicy,
+  deleteTargetInstance,
+  deleteTargetPool,
   ...autocomplete,
 };

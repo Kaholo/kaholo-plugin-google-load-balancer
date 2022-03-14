@@ -232,57 +232,6 @@ async function runHttpsExternalLoadBalancerCreation(action, settings) {
   return result;
 }
 
-// function autocomplete(value) {
-//   if (_.isNil(value)) { return ""; }
-//   if (_.isString(value)) { return value; }
-//   if (_.isObject(value) && _.has(value, "id")) { return value.id; }
-//   throw new Error(`Value "${value}" is not a valid autocomplete result nor string.`);
-// }
-//
-// function mapAutoParams(autoParams) {
-//   const params = {};
-//   autoParams.forEach((param) => {
-//     params[param.name] = autocomplete(param.value);
-//   });
-//   return params;
-// }
-//
-// function getParseFromParam(idParamName, valParamName) {
-//   return (item) => ({
-//     id: item[idParamName],
-//     value: item[valParamName] || item[idParamName],
-//   });
-// }
-//
-// async function getListResults(fields, pluginSettings, pluginParams, clientClass) {
-//   const parseFunc = getParseFromParam(...fields);
-//   const settings = mapAutoParams(pluginSettings);
-//   const params = mapAutoParams(pluginParams);
-//
-//   let result = await listResources(params, settings, clientClass);
-//   result = [...result.map(parseFunc)];
-//   return { params, result };
-// }
-//
-// function createListItemsFunction(clientClass, fields) {
-//   return async function listGcpItems(query, pluginSettings, pluginParams) {
-//     const { result } = await getListResults(fields, pluginSettings, pluginParams, clientClass);
-//     return result;
-//   };
-// }
-//
-// function createListZonesFunction() {
-//   return async function listGcpItems(query, pluginSettings, pluginParams) {
-//     const { result, params } = await getListResults(["name"], pluginSettings, pluginParams, GCCompute.ZonesClient);
-//
-//     const region = autocomplete(params.region);
-//     result.filter((zone) => !region || zone.name.includes(region));
-//
-//     return result;
-//   };
-// }
-
-
 module.exports = {
   runHttpExternalLoadBalancerCreation,
   runHttpsExternalLoadBalancerCreation,

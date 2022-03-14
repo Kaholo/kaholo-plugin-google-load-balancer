@@ -7,7 +7,7 @@ const {
 const {
   runHttpExternalLoadBalancerCreation,
   runHttpsExternalLoadBalancerCreation,
-} = require("./google-load-balancer-service");
+} = require("./gcp-compute-service-adapter");
 
 async function createHttpsExternalLoadBalancer(action, settings) {
   return runHttpsExternalLoadBalancerCreation(action, settings);

@@ -24,12 +24,27 @@
   ],
   "settings": [
     {
+      "name": "creds",
+      "viewName": "Service Account Credentials",
+      "type": "vault",
+      "description": "Default service account credentials",
+      "learnUrl": "https://cloud.google.com/docs/authentication/production"
+    },
+    {
       "name": "project",
-      "viewName": "Default Project Name",
+      "viewName": "Default Project ID",
       "type": "string",
-      "description": "GCP Project defines how your app interacts with services and resources",
-      "placeholder": "project-alpha",
+      "description": "The ID of the default project to send requests to.",
+      "placeholder": "my-project",
       "learnUrl": "https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+    },
+    {
+      "name": "region",
+      "viewName": "Default Region",
+      "type": "string",
+      "description": "The default region to send requests to.",
+      "placeholder": "us-central1",
+      "learnUrl": "https://cloud.google.com/compute/docs/regions-zones"
     }
   ],
   "methods": [

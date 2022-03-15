@@ -533,7 +533,7 @@
     },
     {
       "name": "createAddressFromJSON",
-      "viewName": "Create Addresses from JSON",
+      "viewName": "Create Address from JSON",
       "params": [
         {
           "name": "creds",

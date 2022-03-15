@@ -136,7 +136,7 @@ async function createTargetInstanceFromJSON(action, settings) {
   return createResource(
     action.params,
     settings,
-    GCCompute.SslPoliciesClient,
+    GCCompute.TargetInstancesClient,
     resource,
   );
 }

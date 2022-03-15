@@ -6,18 +6,11 @@ require("@google-cloud/compute");
 const { ProjectsClient } = require("@google-cloud/resource-manager");
 const GCCompute = require("@google-cloud/compute");
 const parsers = require("./parsers");
-const {
-  getParseFromParam,
-  mapAutoParams,
-  getCredentials,
-  getProject,
-  getRegion,
-  getZone,
-} = require("./helpers");
+const helpers = require("./helpers");
 
 async function createResource(params, settings, clientClass, resource) {
-  const credentials = getCredentials(params, settings);
-  const project = getProject(params, settings);
+  const credentials = helpers.getCredentials(params, settings);
+  const project = helpers.getProject(params, settings);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project }, resource);
@@ -36,8 +29,8 @@ async function createResourceWaitForCreation(params, settings, clientClass, reso
 }
 
 async function deleteResource(params, settings, clientClass, resource) {
-  const credentials = getCredentials(params, settings);
-  const project = getProject(params, settings);
+  const credentials = helpers.getCredentials(params, settings);
+  const project = helpers.getProject(params, settings);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project }, resource);
@@ -75,8 +68,8 @@ async function listGcpZones(query, pluginSettings, pluginParams) {
 }
 
 async function getResource(params, settings, clientClass, resource) {
-  const credentials = getCredentials(params, settings);
-  const project = getProject(params, settings);
+  const credentials = helpers.getCredentials(params, settings);
+  const project = helpers.getProject(params, settings);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project }, resource);
@@ -89,9 +82,9 @@ async function getResource(params, settings, clientClass, resource) {
 }
 
 async function getProjects(fields, pluginSettings, pluginParams) {
-  const parseFunc = getParseFromParam(...fields);
-  const settings = mapAutoParams(pluginSettings);
-  const params = mapAutoParams(pluginParams);
+  const parseFunc = helpers.getParseFromParam(...fields);
+  const settings = helpers.mapAutoParams(pluginSettings);
+  const params = helpers.mapAutoParams(pluginParams);
 
   let result = await searchProjects(params, settings);
   result = [...result.map(parseFunc)];
@@ -99,7 +92,7 @@ async function getProjects(fields, pluginSettings, pluginParams) {
 }
 
 async function searchProjects(params, settings) {
-  const credentials = getCredentials(params, settings);
+  const credentials = helpers.getCredentials(params, settings);
   const authorizedClient = getAuthorizedClient(ProjectsClient, credentials);
   const { query } = params;
 
@@ -128,9 +121,9 @@ function createListItemsFunction(clientClass, fields) {
 }
 
 async function getListResults(fields, pluginSettings, pluginParams, clientClass) {
-  const parseFunc = getParseFromParam(...fields);
-  const settings = mapAutoParams(pluginSettings);
-  const params = mapAutoParams(pluginParams);
+  const parseFunc = helpers.getParseFromParam(...fields);
+  const settings = helpers.mapAutoParams(pluginSettings);
+  const params = helpers.mapAutoParams(pluginParams);
 
   let result = await listResources(params, settings, clientClass);
   result = [...result.map(parseFunc)];
@@ -138,10 +131,10 @@ async function getListResults(fields, pluginSettings, pluginParams, clientClass)
 }
 
 async function listResources(params, settings, clientClass, resource = {}) {
-  const credentials = getCredentials(params, settings);
-  const project = getProject(params, settings);
-  const region = getRegion(params);
-  const zone = getZone(params);
+  const credentials = helpers.getCredentials(params, settings);
+  const project = helpers.getProject(params, settings);
+  const region = helpers.getRegion(params);
+  const zone = helpers.getZone(params);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project, region, zone }, resource);

@@ -5,7 +5,6 @@ const {
   createResourceWaitForCreation,
   deleteResourceWaitForDeletion,
 } = require("./google-compute-lib");
-require("./parsers");
 
 function createHealthCheckResource(action) {
   return {

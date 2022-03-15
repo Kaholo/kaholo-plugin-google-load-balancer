@@ -13,22 +13,22 @@ https://cloud.google.com/load-balancing/docs
 
 
 ## Methods
-- Create HTTP External Load Balancer (With rollback [Read below](#loadbalancer))
-- Create HTTPS External Load Balancer (With rollback [Read below](#loadbalancer))
+- Create (Global) HTTP External Load Balancer (With rollback [Read below](#loadbalancer))
+- Create (Global) HTTPS External Load Balancer (With rollback [Read below](#loadbalancer))
 
 
-- Create health check from JSON
-- Create backend service from JSON
-- Create URL map from JSON
-- Create target HTTP proxy from JSON 
-- Create target HTTPS proxy from JSON
-- Create forward rules from JSON
-- Create addresses from JSON 
-- Create backend bucket from JSON 
-- Create SSL certificate from JSON 
-- Create SSL policy from JSON 
-- Create target instance from JSON 
-- Create target pool from JSON  
+- Create health check from JSON (Global)
+- Create backend service from JSON (Global)
+- Create URL map from JSON (Global)
+- Create target HTTP proxy from JSON (Global) 
+- Create target HTTPS proxy from JSON (Global)
+- Create forward rules from JSON (Global)
+- Create addresses from JSON (Global) 
+- Create backend bucket from JSON (Global) 
+- Create SSL certificate from JSON (Global) 
+- Create SSL policy from JSON (Global) 
+- Create target instance from JSON (Global) 
+- Create target pool from JSON (Global)  
 
 
 - Delete health check

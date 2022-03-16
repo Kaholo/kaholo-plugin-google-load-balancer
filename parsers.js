@@ -13,7 +13,7 @@ function object(value) {
 }
 
 function number(value) {
-  const validNumber = (value) => _.isNumber(value) && _.isFinite(value) && !_.isNaN(value);
+  const validNumber = (val) => _.isNumber(val) && _.isFinite(val) && !_.isNaN(val);
   if (validNumber(value)) {
     return value;
   }
@@ -100,7 +100,7 @@ function tags(value) {
   }
   if (_.isObject(value)) {
     if (isTagObject(value)) { return value; }
-    return _.entries(value).map(([Key, Value]) => ({ Key: Key.trim(), Value: Value.trim()}));
+    return _.entries(value).map(([Key, Value]) => ({ Key: Key.trim(), Value: Value.trim() }));
   }
   throw new Error("Unsupported tags format!");
 }

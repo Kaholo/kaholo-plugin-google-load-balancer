@@ -254,7 +254,7 @@
           "required": true,
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listSSLCertificatesAuto",
+          "functionName": "listSslCertificatesAuto",
           "description": "Name of the SSL certificate",
           "placeholder": "select using autocomplete",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates/insert"

@@ -5,7 +5,7 @@
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "category": ["CLOUD"],
   "keywords": [
     "GCP",
@@ -254,7 +254,7 @@
           "required": true,
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listSSLCertificatesAuto",
+          "functionName": "listSslCertificatesAuto",
           "description": "Name of the SSL certificate",
           "placeholder": "select using autocomplete",
           "learnUrl": "https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates/insert"

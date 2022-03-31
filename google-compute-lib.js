@@ -1,8 +1,6 @@
 /* eslint no-use-before-define: 0 */
 
-const gcpCompute = require("@google-cloud/compute");
 const _ = require("lodash");
-require("@google-cloud/compute");
 const { ProjectsClient } = require("@google-cloud/resource-manager");
 const GCCompute = require("@google-cloud/compute");
 const parsers = require("./parsers");
@@ -174,24 +172,26 @@ async function callDelete(client, request, waitForOperation = false) {
 }
 
 async function callMethod(methodName, client, request, waitForOperation = false) {
-  if (waitForOperation) {
-    const operationsClient = new gcpCompute.GlobalOperationsClient({
-      credentials: client.credentials,
-    });
-
-    let [operation] = await client.clientInstance[methodName](request);
-
-    while (operation.status !== "DONE") {
-      // eslint-disable-next-line no-await-in-loop
-      [operation] = await operationsClient.wait({
-        operation: operation.name,
-        project: request.project,
-      });
-    }
-    return operation;
-  }
   const result = await client.clientInstance[methodName](request);
-  return result;
+
+  if (!waitForOperation) {
+    return result;
+  }
+
+  const operationsClient = new GCCompute.GlobalOperationsClient({
+    credentials: client.credentials,
+  });
+
+  let [operation] = result;
+  while (operation.status !== "DONE") {
+    // eslint-disable-next-line no-await-in-loop
+    [operation] = await operationsClient.wait({
+      operation: operation.name,
+      project: request.project,
+    });
+  }
+
+  return operation;
 }
 
 function getAuthorizedClient(ClientClass, credentials) {

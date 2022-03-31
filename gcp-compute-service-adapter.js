@@ -1,7 +1,8 @@
 const GCCompute = require("@google-cloud/compute");
 const _ = require("lodash");
 const {
-  getResource,
+  RESOURCE_OPERATIONS,
+  callResourceOperation,
   createResourceWaitForCreation,
   deleteResourceWaitForDeletion,
 } = require("./google-compute-lib");
@@ -22,7 +23,8 @@ async function createBackendServiceResource(action, settings) {
       name: action.params.backendServiceName,
       backends: [
         {
-          group: (await getResource(
+          group: (await callResourceOperation(
+            RESOURCE_OPERATIONS.get,
             action.params,
             settings,
             GCCompute.InstanceGroupsClient,
@@ -34,7 +36,8 @@ async function createBackendServiceResource(action, settings) {
         },
       ],
       healthChecks: [
-        (await getResource(
+        (await callResourceOperation(
+          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
           GCCompute.HealthChecksClient,
@@ -53,7 +56,8 @@ async function createUrlMapResource(action, settings) {
   const urlMapResource = {
     urlMapResource: {
       name: action.params.urlMapName,
-      defaultService: (await getResource(
+      defaultService: (await callResourceOperation(
+        RESOURCE_OPERATIONS.get,
         action.params,
         settings,
         GCCompute.BackendServicesClient,
@@ -71,7 +75,8 @@ async function createTargetHttpProxyResource(action, settings) {
     targetHttpProxyResource:
       {
         name: action.params.httpProxyName,
-        urlMap: (await getResource(
+        urlMap: (await callResourceOperation(
+          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
           GCCompute.UrlMapsClient,
@@ -85,7 +90,8 @@ async function createTargetHttpProxyResource(action, settings) {
 }
 
 async function createTargetHttpsProxyResource(action, settings) {
-  const sslCertificateURL = (await getResource(
+  const sslCertificateURL = (await callResourceOperation(
+    RESOURCE_OPERATIONS.get,
     action.params,
     settings,
     GCCompute.SslCertificatesClient,
@@ -98,7 +104,8 @@ async function createTargetHttpsProxyResource(action, settings) {
     targetHttpsProxyResource:
       {
         name: action.params.httpsProxyName,
-        urlMap: (await getResource(
+        urlMap: (await callResourceOperation(
+          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
           GCCompute.UrlMapsClient,
@@ -115,14 +122,16 @@ async function createTargetHttpsProxyResource(action, settings) {
 async function createForwardingRuleResource(action, settings) {
   let target;
   if (action.params.httpProxyName) {
-    target = (await getResource(
+    target = (await callResourceOperation(
+      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
       GCCompute.TargetHttpProxiesClient,
       { targetHttpProxy: action.params.httpProxyName },
     )).selfLink;
   } else {
-    target = (await getResource(
+    target = (await callResourceOperation(
+      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
       GCCompute.TargetHttpsProxiesClient,
@@ -194,7 +203,8 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
     resource[resourceData.typeProperty] = resourceData.name;
 
     // eslint-disable-next-line no-await-in-loop
-    const createdResource = await getResource(
+    const createdResource = await callResourceOperation(
+      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
       resourceData.client,

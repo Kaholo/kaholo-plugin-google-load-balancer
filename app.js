@@ -1,8 +1,8 @@
 const GCCompute = require("@google-cloud/compute");
 const autocomplete = require("./autocomplete");
 const {
-  createResource,
-  deleteResource,
+  RESOURCE_OPERATIONS,
+  callResourceOperation,
 } = require("./google-compute-lib");
 const {
   runHttpExternalLoadBalancerCreation,
@@ -20,7 +20,8 @@ async function createHttpExternalLoadBalancer(action, settings) {
 async function createHealthCheckFromJSON(action, settings) {
   const resource = { healthCheckResource: action.params.healthCheckJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.HealthChecksClient,
@@ -31,7 +32,8 @@ async function createHealthCheckFromJSON(action, settings) {
 async function createBackendServiceFromJSON(action, settings) {
   const resource = { backendServiceResource: action.params.backendServiceJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.BackendServicesClient,
@@ -42,7 +44,8 @@ async function createBackendServiceFromJSON(action, settings) {
 async function createURLMapFromJSON(action, settings) {
   const resource = { urlMapResource: action.params.urlMapJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.UrlMapsClient,
@@ -53,7 +56,8 @@ async function createURLMapFromJSON(action, settings) {
 async function createTargetHttpProxyFromJSON(action, settings) {
   const resource = { targetHttpProxyResource: action.params.targetHttpProxyJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.TargetHttpProxiesClient,
@@ -64,7 +68,8 @@ async function createTargetHttpProxyFromJSON(action, settings) {
 async function createTargetHttpsProxyFromJSON(action, settings) {
   const resource = { targetHttpsProxyResource: action.params.targetHttpsProxyJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.TargetHttpsProxiesClient,
@@ -75,7 +80,8 @@ async function createTargetHttpsProxyFromJSON(action, settings) {
 async function createForwardRulesFromJSON(action, settings) {
   const resource = { forwardingRuleResource: action.params.forwardRulesJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.GlobalForwardingRulesClient,
@@ -86,7 +92,8 @@ async function createForwardRulesFromJSON(action, settings) {
 async function createAddressFromJSON(action, settings) {
   const resource = { addressResource: action.params.addressJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.AddressesClient,
@@ -97,7 +104,8 @@ async function createAddressFromJSON(action, settings) {
 async function createBackendBucketFromJSON(action, settings) {
   const resource = { backendBucketResource: action.params.backendBucketJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.BackendBucketsClient,
@@ -108,7 +116,8 @@ async function createBackendBucketFromJSON(action, settings) {
 async function createSslCertificateFromJSON(action, settings) {
   const resource = { sslCertificateResource: action.params.sslCertificateJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.SslCertificatesClient,
@@ -119,7 +128,8 @@ async function createSslCertificateFromJSON(action, settings) {
 async function createSslPolicyFromJSON(action, settings) {
   const resource = { sslPolicyResource: action.params.sslPolicyJSON };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.SslPoliciesClient,
@@ -133,7 +143,8 @@ async function createTargetInstanceFromJSON(action, settings) {
     zone: action.params.zone,
   };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.TargetInstancesClient,
@@ -147,7 +158,8 @@ async function createTargetPoolFromJSON(action, settings) {
     region: action.params.region,
   };
 
-  return createResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
     action.params,
     settings,
     GCCompute.TargetPoolsClient,
@@ -159,7 +171,8 @@ async function deleteHealthCheck(action, settings) {
   const resource = {
     healthCheck: action.params.healthCheckName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.HealthChecksClient,
@@ -171,7 +184,8 @@ async function deleteBackendService(action, settings) {
   const resource = {
     backendService: action.params.backendServiceName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.BackendServicesClient,
@@ -183,7 +197,8 @@ async function deleteUrlMap(action, settings) {
   const resource = {
     urlMap: action.params.urlMapName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.UrlMapsClient,
@@ -195,7 +210,8 @@ async function deleteTargetHttpProxy(action, settings) {
   const resource = {
     targetHttpProxy: action.params.targetHttpProxyName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.TargetHttpProxiesClient,
@@ -207,7 +223,8 @@ async function deleteTargetHttpsProxy(action, settings) {
   const resource = {
     targetHttpsProxy: action.params.targetHttpsProxyName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.TargetHttpsProxiesClient,
@@ -219,7 +236,8 @@ async function deleteForwardingRules(action, settings) {
   const resource = {
     forwardingRule: action.params.forwardingRuleName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.GlobalForwardingRulesClient,
@@ -232,7 +250,8 @@ async function deleteAddress(action, settings) {
     address: action.params.addressName.value,
 
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.AddressesClient,
@@ -244,7 +263,8 @@ async function deleteBackendBucket(action, settings) {
   const resource = {
     backendBucket: action.params.backendBucketName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.BackendBucketsClient,
@@ -256,7 +276,8 @@ async function deleteSslCertificate(action, settings) {
   const resource = {
     sslCertificate: action.params.sslCertificateName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.SslCertificatesClient,
@@ -268,7 +289,8 @@ async function deleteSslPolicy(action, settings) {
   const resource = {
     sslPolicy: action.params.sslPolicyName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.SslPoliciesClient,
@@ -281,7 +303,8 @@ async function deleteTargetInstance(action, settings) {
     targetInstance: action.params.targetInstanceName.value,
     zone: action.params.zone.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.TargetInstancesClient,
@@ -293,7 +316,8 @@ async function deleteTargetPool(action, settings) {
   const resource = {
     targetPool: action.params.targetPoolName.value,
   };
-  return deleteResource(
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
     action.params,
     settings,
     GCCompute.TargetPoolsClient,

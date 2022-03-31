@@ -6,14 +6,20 @@ const GCCompute = require("@google-cloud/compute");
 const parsers = require("./parsers");
 const helpers = require("./helpers");
 
-async function createResource(params, settings, clientClass, resource) {
+const RESOURCE_OPERATIONS = {
+  create: callInsert,
+  get: callGet,
+  delete: callDelete,
+};
+
+async function callResourceOperation(resourceOperation, params, settings, clientClass, resource) {
   const credentials = helpers.getCredentials(params, settings);
-  const project = helpers.getProject(params, settings);
   const authorizedClient = getAuthorizedClient(clientClass, credentials);
 
+  const project = helpers.getProject(params, settings);
   const request = _.merge({ project }, resource);
 
-  const result = await callInsert(
+  const result = await resourceOperation(
     authorizedClient,
     request,
     params.waitForOperation,
@@ -23,27 +29,24 @@ async function createResource(params, settings, clientClass, resource) {
 
 async function createResourceWaitForCreation(params, settings, clientClass, resource) {
   const paramsWithWaitForOperation = { ...params, waitForOperation: true };
-  return createResource(paramsWithWaitForOperation, settings, clientClass, resource);
-}
-
-async function deleteResource(params, settings, clientClass, resource) {
-  const credentials = helpers.getCredentials(params, settings);
-  const project = helpers.getProject(params, settings);
-  const authorizedClient = getAuthorizedClient(clientClass, credentials);
-
-  const request = _.merge({ project }, resource);
-
-  const result = await callDelete(
-    authorizedClient,
-    request,
-    params.waitForOperation,
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.create,
+    paramsWithWaitForOperation,
+    settings,
+    clientClass,
+    resource,
   );
-  return result;
 }
 
 async function deleteResourceWaitForDeletion(params, settings, clientClass, resource) {
   const paramsWithWaitForOperation = { ...params, waitForOperation: true };
-  return deleteResource(paramsWithWaitForOperation, settings, clientClass, resource);
+  return callResourceOperation(
+    RESOURCE_OPERATIONS.delete,
+    paramsWithWaitForOperation,
+    settings,
+    clientClass,
+    resource,
+  );
 }
 
 async function listGcpProjects(query, pluginSettings, pluginParams) {
@@ -63,20 +66,6 @@ async function listGcpZones(query, pluginSettings, pluginParams) {
   result.filter((zone) => !region || zone.name.includes(region));
 
   return result;
-}
-
-async function getResource(params, settings, clientClass, resource) {
-  const credentials = helpers.getCredentials(params, settings);
-  const project = helpers.getProject(params, settings);
-  const authorizedClient = getAuthorizedClient(clientClass, credentials);
-
-  const request = _.merge({ project }, resource);
-
-  const result = await callGet(
-    authorizedClient,
-    request,
-  );
-  return result[0];
 }
 
 async function getProjects(fields, pluginSettings, pluginParams) {
@@ -160,7 +149,7 @@ async function callInsert(client, request, waitForOperation) {
 }
 
 async function callGet(client, request) {
-  return _.partial(callMethod, "get")(client, request);
+  return (await _.partial(callMethod, "get")(client, request))[0];
 }
 
 async function callListAsync(client, request) {
@@ -200,12 +189,11 @@ function getAuthorizedClient(ClientClass, credentials) {
 }
 
 module.exports = {
+  RESOURCE_OPERATIONS,
+  callResourceOperation,
   createListItemsFunction,
-  createResource,
   createResourceWaitForCreation,
-  deleteResource,
   deleteResourceWaitForDeletion,
-  getResource,
   listGcpProjects,
   listGcpRegions,
   listGcpZones,

@@ -3,8 +3,6 @@ const _ = require("lodash");
 const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
-  createResourceWaitForCreation,
-  deleteResourceWaitForDeletion,
 } = require("./google-compute-lib");
 
 function createHealthCheckResource(action) {
@@ -158,8 +156,9 @@ async function rollback(createdResources, action, settings) {
     resource[resourceToRollback.typeProperty] = resourceToRollback.name;
     try {
       // eslint-disable-next-line no-await-in-loop
-      await deleteResourceWaitForDeletion(
-        action.params,
+      await callResourceOperation(
+        RESOURCE_OPERATIONS.delete,
+        { ...action.params, waitForOperation: true },
         settings,
         resourceToRollback.client,
         resource,
@@ -180,8 +179,9 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
       const resource = await resourceData.createResourceFunc(action, settings);
       const { client } = resourceData;
       // eslint-disable-next-line no-await-in-loop
-      await createResourceWaitForCreation(
-        action.params,
+      await callResourceOperation(
+        RESOURCE_OPERATIONS.create,
+        { ...action.params, waitForOperation: true },
         settings,
         client,
         resource,

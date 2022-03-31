@@ -27,28 +27,6 @@ async function callResourceOperation(resourceOperation, params, settings, client
   return result;
 }
 
-async function createResourceWaitForCreation(params, settings, clientClass, resource) {
-  const paramsWithWaitForOperation = { ...params, waitForOperation: true };
-  return callResourceOperation(
-    RESOURCE_OPERATIONS.create,
-    paramsWithWaitForOperation,
-    settings,
-    clientClass,
-    resource,
-  );
-}
-
-async function deleteResourceWaitForDeletion(params, settings, clientClass, resource) {
-  const paramsWithWaitForOperation = { ...params, waitForOperation: true };
-  return callResourceOperation(
-    RESOURCE_OPERATIONS.delete,
-    paramsWithWaitForOperation,
-    settings,
-    clientClass,
-    resource,
-  );
-}
-
 async function listGcpProjects(query, pluginSettings, pluginParams) {
   const { result } = await getProjects(["projectId", "displayName"], pluginSettings, pluginParams);
   return result;
@@ -192,8 +170,6 @@ module.exports = {
   RESOURCE_OPERATIONS,
   callResourceOperation,
   createListItemsFunction,
-  createResourceWaitForCreation,
-  deleteResourceWaitForDeletion,
   listGcpProjects,
   listGcpRegions,
   listGcpZones,

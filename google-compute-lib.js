@@ -7,9 +7,9 @@ const parsers = require("./parsers");
 const helpers = require("./helpers");
 
 const RESOURCE_OPERATIONS = {
-  create: callInsert,
-  get: callGet,
-  delete: callDelete,
+  create: _.partial(callMethod, "insert"),
+  get: async (client, request) => (await _.partial(callMethod, "get")(client, request))[0],
+  delete: _.partial(callMethod, "delete"),
 };
 
 async function callResourceOperation(resourceOperation, params, settings, clientClass, resource) {
@@ -25,6 +25,13 @@ async function callResourceOperation(resourceOperation, params, settings, client
     params.waitForOperation,
   );
   return result;
+}
+
+function createListItemsFunction(clientClass, fields) {
+  return async function listGcpItems(query, pluginSettings, pluginParams) {
+    const { result } = await getListResults(fields, pluginSettings, pluginParams, clientClass);
+    return result;
+  };
 }
 
 async function listGcpProjects(query, pluginSettings, pluginParams) {
@@ -63,7 +70,7 @@ async function searchProjects(params, settings) {
 
   const request = { query: query ? `name:*${query}*` : undefined };
 
-  const iterable = await callSearchProjectsAsync(authorizedClient, request);
+  const iterable = await _.partial(callMethod, "searchProjectsAsync")(authorizedClient, request);
   const res = [];
 
   try {
@@ -76,13 +83,6 @@ async function searchProjects(params, settings) {
   }
 
   return res;
-}
-
-function createListItemsFunction(clientClass, fields) {
-  return async function listGcpItems(query, pluginSettings, pluginParams) {
-    const { result } = await getListResults(fields, pluginSettings, pluginParams, clientClass);
-    return result;
-  };
 }
 
 async function getListResults(fields, pluginSettings, pluginParams, clientClass) {
@@ -105,7 +105,7 @@ async function listResources(params, settings, clientClass, resource = {}) {
   const request = _.merge({ project, region, zone }, resource);
 
   const res = [];
-  const iterable = await callListAsync(authorizedClient, request);
+  const iterable = await _.partial(callMethod, "listAsync")(authorizedClient, request);
 
   try {
     // eslint-disable-next-line no-restricted-syntax
@@ -116,26 +116,6 @@ async function listResources(params, settings, clientClass, resource = {}) {
     return Promise.reject(err);
   }
   return res;
-}
-
-async function callSearchProjectsAsync(client, request) {
-  return _.partial(callMethod, "searchProjectsAsync")(client, request);
-}
-
-async function callInsert(client, request, waitForOperation) {
-  return _.partial(callMethod, "insert")(client, request, waitForOperation);
-}
-
-async function callGet(client, request) {
-  return (await _.partial(callMethod, "get")(client, request))[0];
-}
-
-async function callListAsync(client, request) {
-  return _.partial(callMethod, "listAsync")(client, request);
-}
-
-async function callDelete(client, request, waitForOperation = false) {
-  return _.partial(callMethod, "delete")(client, request, waitForOperation);
 }
 
 async function callMethod(methodName, client, request, waitForOperation = false) {

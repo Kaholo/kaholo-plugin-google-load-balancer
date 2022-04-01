@@ -17,340 +17,231 @@ async function createHttpExternalLoadBalancer(action, settings) {
   return runHttpExternalLoadBalancerCreation(action, settings);
 }
 
-async function createHealthCheckFromJSON(action, settings) {
-  const resource = { healthCheckResource: action.params.healthCheckJSON };
+class GcpResourceMethodDefinition {
+  constructor(GCPMethod, resourceOperation, createResourceDefinitionFn) {
+    this.GCPMethod = GCPMethod;
+    this.resourceOperation = resourceOperation;
+    this.createResourceDefinitionFn = createResourceDefinitionFn;
+  }
+}
 
-  return callResourceOperation(
-    RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+const GCP_RESOURCE_METHODS_DEFINITIONS = {
+  createHealthCheckFromJSON: new GcpResourceMethodDefinition(
     GCCompute.HealthChecksClient,
-    resource,
-  );
-}
-
-async function createBackendServiceFromJSON(action, settings) {
-  const resource = { backendServiceResource: action.params.backendServiceJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      healthCheckResource: action.params.healthCheckJSON,
+    }),
+  ),
+  createBackendServiceFromJSON: new GcpResourceMethodDefinition(
     GCCompute.BackendServicesClient,
-    resource,
-  );
-}
-
-async function createURLMapFromJSON(action, settings) {
-  const resource = { urlMapResource: action.params.urlMapJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      backendServiceResource: action.params.backendServiceJSON,
+    }),
+  ),
+  createURLMapFromJSON: new GcpResourceMethodDefinition(
     GCCompute.UrlMapsClient,
-    resource,
-  );
-}
-
-async function createTargetHttpProxyFromJSON(action, settings) {
-  const resource = { targetHttpProxyResource: action.params.targetHttpProxyJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      urlMapResource: action.params.urlMapJSON,
+    }),
+  ),
+  createTargetHttpProxyFromJSON: new GcpResourceMethodDefinition(
     GCCompute.TargetHttpProxiesClient,
-    resource,
-  );
-}
-
-async function createTargetHttpsProxyFromJSON(action, settings) {
-  const resource = { targetHttpsProxyResource: action.params.targetHttpsProxyJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      targetHttpProxyResource: action.params.targetHttpProxyJSON,
+    }),
+  ),
+  createTargetHttpsProxyFromJSON: new GcpResourceMethodDefinition(
     GCCompute.TargetHttpsProxiesClient,
-    resource,
-  );
-}
-
-async function createForwardRulesFromJSON(action, settings) {
-  const resource = { forwardingRuleResource: action.params.forwardRulesJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      targetHttpsProxyResource: action.params.targetHttpsProxyJSON,
+    }),
+  ),
+  createForwardRulesFromJSON: new GcpResourceMethodDefinition(
     GCCompute.GlobalForwardingRulesClient,
-    resource,
-  );
-}
-
-async function createAddressFromJSON(action, settings) {
-  const resource = { addressResource: action.params.addressJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      forwardingRuleResource: action.params.forwardRulesJSON,
+    }),
+  ),
+  createAddressFromJSON: new GcpResourceMethodDefinition(
     GCCompute.AddressesClient,
-    resource,
-  );
-}
-
-async function createBackendBucketFromJSON(action, settings) {
-  const resource = { backendBucketResource: action.params.backendBucketJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      addressResource: action.params.addressJSON,
+    }),
+  ),
+  createBackendBucketFromJSON: new GcpResourceMethodDefinition(
     GCCompute.BackendBucketsClient,
-    resource,
-  );
-}
-
-async function createSslCertificateFromJSON(action, settings) {
-  const resource = { sslCertificateResource: action.params.sslCertificateJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      targetPoolResource: action.params.targetPoolJSON,
+      region: action.params.region,
+    }),
+  ),
+  createSslCertificateFromJSON: new GcpResourceMethodDefinition(
     GCCompute.SslCertificatesClient,
-    resource,
-  );
-}
-
-async function createSslPolicyFromJSON(action, settings) {
-  const resource = { sslPolicyResource: action.params.sslPolicyJSON };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      sslCertificateResource: action.params.sslCertificateJSON,
+    }),
+  ),
+  createSslPolicyFromJSON: new GcpResourceMethodDefinition(
     GCCompute.SslPoliciesClient,
-    resource,
-  );
-}
-
-async function createTargetInstanceFromJSON(action, settings) {
-  const resource = {
-    targetInstanceResource: action.params.targetInstanceJSON,
-    zone: action.params.zone,
-  };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      sslPolicyResource: action.params.sslPolicyJSON,
+    }),
+  ),
+  createTargetInstanceFromJSON: new GcpResourceMethodDefinition(
     GCCompute.TargetInstancesClient,
-    resource,
-  );
-}
-
-async function createTargetPoolFromJSON(action, settings) {
-  const resource = {
-    targetPoolResource: action.params.targetPoolJSON,
-    region: action.params.region,
-  };
-
-  return callResourceOperation(
     RESOURCE_OPERATIONS.create,
-    action.params,
-    settings,
+    (action) => ({
+      targetInstanceResource: action.params.targetInstanceJSON,
+      zone: action.params.zone,
+    }),
+  ),
+  createTargetPoolFromJSON: new GcpResourceMethodDefinition(
     GCCompute.TargetPoolsClient,
-    resource,
-  );
-}
-
-async function deleteHealthCheck(action, settings) {
-  const resource = {
-    healthCheck: action.params.healthCheckName.value,
-  };
-  return callResourceOperation(
-    RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    RESOURCE_OPERATIONS.create,
+    (action) => ({
+      targetPoolResource: action.params.targetPoolJSON,
+      region: action.params.region,
+    }),
+  ),
+  deleteHealthCheck: new GcpResourceMethodDefinition(
     GCCompute.HealthChecksClient,
-    resource,
-  );
-}
-
-async function deleteBackendService(action, settings) {
-  const resource = {
-    backendService: action.params.backendServiceName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      healthCheck: action.params.healthCheckName.value,
+    }),
+  ),
+  deleteBackendService: new GcpResourceMethodDefinition(
     GCCompute.BackendServicesClient,
-    resource,
-  );
-}
-
-async function deleteUrlMap(action, settings) {
-  const resource = {
-    urlMap: action.params.urlMapName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      backendService: action.params.backendServiceName.value,
+    }),
+  ),
+  deleteUrlMap: new GcpResourceMethodDefinition(
     GCCompute.UrlMapsClient,
-    resource,
-  );
-}
-
-async function deleteTargetHttpProxy(action, settings) {
-  const resource = {
-    targetHttpProxy: action.params.targetHttpProxyName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      urlMap: action.params.urlMapName.value,
+    }),
+  ),
+  deleteTargetHttpProxy: new GcpResourceMethodDefinition(
     GCCompute.TargetHttpProxiesClient,
-    resource,
-  );
-}
-
-async function deleteTargetHttpsProxy(action, settings) {
-  const resource = {
-    targetHttpsProxy: action.params.targetHttpsProxyName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      targetHttpProxy: action.params.targetHttpProxyName.value,
+    }),
+  ),
+  deleteTargetHttpsProxy: new GcpResourceMethodDefinition(
     GCCompute.TargetHttpsProxiesClient,
-    resource,
-  );
-}
-
-async function deleteForwardingRules(action, settings) {
-  const resource = {
-    forwardingRule: action.params.forwardingRuleName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      targetHttpsProxy: action.params.targetHttpsProxyName.value,
+    }),
+  ),
+  deleteForwardingRules: new GcpResourceMethodDefinition(
     GCCompute.GlobalForwardingRulesClient,
-    resource,
-  );
-}
-
-async function deleteAddress(action, settings) {
-  const resource = {
-    address: action.params.addressName.value,
-
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      forwardingRule: action.params.forwardingRuleName.value,
+    }),
+  ),
+  deleteAddress: new GcpResourceMethodDefinition(
     GCCompute.AddressesClient,
-    resource,
-  );
-}
-
-async function deleteBackendBucket(action, settings) {
-  const resource = {
-    backendBucket: action.params.backendBucketName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      address: action.params.addressName.value,
+    }),
+  ),
+  deleteBackendBucket: new GcpResourceMethodDefinition(
     GCCompute.BackendBucketsClient,
-    resource,
-  );
-}
-
-async function deleteSslCertificate(action, settings) {
-  const resource = {
-    sslCertificate: action.params.sslCertificateName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      backendBucket: action.params.backendBucketName.value,
+    }),
+  ),
+  deleteSslCertificate: new GcpResourceMethodDefinition(
     GCCompute.SslCertificatesClient,
-    resource,
-  );
-}
-
-async function deleteSslPolicy(action, settings) {
-  const resource = {
-    sslPolicy: action.params.sslPolicyName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      sslCertificate: action.params.sslCertificateName.value,
+    }),
+  ),
+  deleteSslPolicy: new GcpResourceMethodDefinition(
     GCCompute.SslPoliciesClient,
-    resource,
-  );
-}
-
-async function deleteTargetInstance(action, settings) {
-  const resource = {
-    targetInstance: action.params.targetInstanceName.value,
-    zone: action.params.zone.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
-    action.params,
-    settings,
+    (action) => ({
+      sslPolicy: action.params.sslPolicyName.value,
+    }),
+  ),
+  deleteTargetInstance: new GcpResourceMethodDefinition(
     GCCompute.TargetInstancesClient,
-    resource,
-  );
-}
-
-async function deleteTargetPool(action, settings) {
-  const resource = {
-    targetPool: action.params.targetPoolName.value,
-  };
-  return callResourceOperation(
     RESOURCE_OPERATIONS.delete,
+    (action) => ({
+      targetInstance: action.params.targetInstanceName.value,
+      zone: action.params.zone.value,
+    }),
+  ),
+  deleteTargetPool: new GcpResourceMethodDefinition(
+    GCCompute.TargetPoolsClient,
+    RESOURCE_OPERATIONS.delete,
+    (action) => ({
+      targetPool: action.params.targetPoolName.value,
+    }),
+  ),
+};
+
+function generateGCPResourceMethod({
+  GCPMethod,
+  resourceOperation,
+  createResourceDefinitionFn,
+}) {
+  return (action, settings) => callResourceOperation(
+    resourceOperation,
     action.params,
     settings,
-    GCCompute.TargetPoolsClient,
-    resource,
+    GCPMethod,
+    createResourceDefinitionFn(action),
   );
 }
 
+/* eslint-disable max-len */
 module.exports = {
-  createHealthCheckFromJSON,
-  createBackendServiceFromJSON,
-  createURLMapFromJSON,
-  createTargetHttpProxyFromJSON,
-  createTargetHttpsProxyFromJSON,
-  createForwardRulesFromJSON,
-  createAddressFromJSON,
-  createBackendBucketFromJSON,
-  createSslCertificateFromJSON,
-  createSslPolicyFromJSON,
-  createTargetInstanceFromJSON,
-  createTargetPoolFromJSON,
-  createHttpExternalLoadBalancer,
   createHttpsExternalLoadBalancer,
-  deleteHealthCheck,
-  deleteBackendService,
-  deleteUrlMap,
-  deleteTargetHttpProxy,
-  deleteTargetHttpsProxy,
-  deleteForwardingRules,
-  deleteAddress,
-  deleteBackendBucket,
-  deleteSslCertificate,
-  deleteSslPolicy,
-  deleteTargetInstance,
-  deleteTargetPool,
+  createHttpExternalLoadBalancer,
+  createHealthCheckFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createHealthCheckFromJSON),
+  createBackendServiceFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createBackendServiceFromJSON),
+  createURLMapFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createURLMapFromJSON),
+  createTargetHttpProxyFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createTargetHttpProxyFromJSON),
+  createTargetHttpsProxyFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createTargetHttpsProxyFromJSON),
+  createForwardRulesFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createForwardRulesFromJSON),
+  createAddressFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createAddressFromJSON),
+  createBackendBucketFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createBackendBucketFromJSON),
+  createSslCertificateFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createSslCertificateFromJSON),
+  createSslPolicyFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createSslPolicyFromJSON),
+  createTargetInstanceFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createTargetInstanceFromJSON),
+  createTargetPoolFromJSON: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.createTargetPoolFromJSON),
+  deleteHealthCheck: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteHealthCheck),
+  deleteBackendService: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteBackendService),
+  deleteUrlMap: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteUrlMap),
+  deleteTargetHttpProxy: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteTargetHttpProxy),
+  deleteTargetHttpsProxy: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteTargetHttpsProxy),
+  deleteForwardingRules: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteForwardingRules),
+  deleteAddress: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteAddress),
+  deleteBackendBucket: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteBackendBucket),
+  deleteSslCertificate: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteSslCertificate),
+  deleteSslPolicy: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteSslPolicy),
+  deleteTargetInstance: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteTargetInstance),
+  deleteTargetPool: generateGCPResourceMethod(GCP_RESOURCE_METHODS_DEFINITIONS.deleteTargetPool),
   ...autocomplete,
 };
+/* eslint-enable max-len */

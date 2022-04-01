@@ -14,7 +14,7 @@ const RESOURCE_OPERATIONS = {
 
 async function callResourceOperation(resourceOperation, params, settings, clientClass, resource) {
   const credentials = helpers.getCredentials(params, settings);
-  const authorizedClient = getAuthorizedClient(clientClass, credentials);
+  const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
 
   const project = helpers.getProject(params, settings);
   const request = _.merge({ project }, resource);
@@ -58,7 +58,7 @@ async function getProjects(fields, pluginSettings, pluginParams) {
 
 async function searchProjects(params, settings) {
   const credentials = helpers.getCredentials(params, settings);
-  const authorizedClient = getAuthorizedClient(ProjectsClient, credentials);
+  const authorizedClient = helpers.getAuthorizedClient(ProjectsClient, credentials);
   const { query } = params;
 
   const request = { query: query ? `name:*${query}*` : undefined };
@@ -100,7 +100,7 @@ async function listResources(params, settings, clientClass, resource = {}) {
   const project = helpers.getProject(params, settings);
   const region = helpers.getRegion(params);
   const zone = helpers.getZone(params);
-  const authorizedClient = getAuthorizedClient(clientClass, credentials);
+  const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
 
   const request = _.merge({ project, region, zone }, resource);
 
@@ -159,11 +159,6 @@ async function callMethod(methodName, client, request, waitForOperation = false)
   }
 
   return operation;
-}
-
-function getAuthorizedClient(ClientClass, credentials) {
-  const clientInstance = new ClientClass({ credentials });
-  return { clientInstance, credentials };
 }
 
 module.exports = {

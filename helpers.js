@@ -38,6 +38,11 @@ function getZone(params) {
   return zone;
 }
 
+function getAuthorizedClient(ClientClass, credentials) {
+  const clientInstance = new ClientClass({ credentials });
+  return { clientInstance, credentials };
+}
+
 module.exports = {
   getParseFromParam,
   mapAutoParams,
@@ -45,4 +50,5 @@ module.exports = {
   getProject,
   getRegion,
   getZone,
+  getAuthorizedClient,
 };

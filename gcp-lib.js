@@ -12,17 +12,21 @@ const RESOURCE_OPERATIONS = {
   searchProjectsAsync: _.partial(callMethod, "searchProjectsAsync"),
 };
 
-async function callResourceOperation(resourceOperation, params, settings, clientClass, resource) {
-  const credentials = helpers.getCredentials(params, settings);
+async function callResourceOperation(
+  resourceOperation,
+  clientClass,
+  credentials,
+  project,
+  resource,
+  waitForOperation,
+) {
   const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
-
-  const project = helpers.getProject(params, settings);
   const request = _.merge({ project }, resource);
 
   const result = await resourceOperation(
     authorizedClient,
     request,
-    params.waitForOperation,
+    waitForOperation,
   );
   return result;
 }

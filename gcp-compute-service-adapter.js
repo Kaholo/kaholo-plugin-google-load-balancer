@@ -4,6 +4,7 @@ const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
 } = require("./gcp-lib");
+const helpers = require("./helpers");
 
 function createHealthCheckResource(action) {
   return {
@@ -16,16 +17,19 @@ function createHealthCheckResource(action) {
 }
 
 async function createBackendServiceResource(action, settings) {
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
+
   const backendServiceResource = {
     backendServiceResource: {
       name: action.params.backendServiceName,
       backends: [
         {
           group: (await callResourceOperation(
-            action.params,
-            settings,
             RESOURCE_OPERATIONS.get,
             GCCompute.InstanceGroupsClient,
+            credentials,
+            project,
             {
               zone: action.params.zone.value,
               instanceGroup: action.params.instanceGroupName.value,
@@ -35,10 +39,10 @@ async function createBackendServiceResource(action, settings) {
       ],
       healthChecks: [
         (await callResourceOperation(
-          action.params,
-          settings,
           RESOURCE_OPERATIONS.get,
           GCCompute.HealthChecksClient,
+          credentials,
+          project,
           {
             zone: action.params.zone.value,
             healthCheck: action.params.healthCheckName,
@@ -51,14 +55,17 @@ async function createBackendServiceResource(action, settings) {
 }
 
 async function createUrlMapResource(action, settings) {
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
+
   const urlMapResource = {
     urlMapResource: {
       name: action.params.urlMapName,
       defaultService: (await callResourceOperation(
-        action.params,
-        settings,
         RESOURCE_OPERATIONS.get,
         GCCompute.BackendServicesClient,
+        credentials,
+        project,
         {
           backendService: action.params.backendServiceName,
         },
@@ -69,15 +76,18 @@ async function createUrlMapResource(action, settings) {
 }
 
 async function createTargetHttpProxyResource(action, settings) {
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
+
   const targetHttpProxyResource = {
     targetHttpProxyResource:
       {
         name: action.params.httpProxyName,
         urlMap: (await callResourceOperation(
-          action.params,
-          settings,
           RESOURCE_OPERATIONS.get,
           GCCompute.UrlMapsClient,
+          credentials,
+          project,
           {
             urlMap: action.params.urlMapName,
           },
@@ -88,11 +98,14 @@ async function createTargetHttpProxyResource(action, settings) {
 }
 
 async function createTargetHttpsProxyResource(action, settings) {
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
+
   const sslCertificateURL = (await callResourceOperation(
-    action.params,
-    settings,
     RESOURCE_OPERATIONS.get,
     GCCompute.SslCertificatesClient,
+    credentials,
+    project,
     {
       sslCertificate: action.params.sslCertificateName.value,
     },
@@ -103,10 +116,10 @@ async function createTargetHttpsProxyResource(action, settings) {
       {
         name: action.params.httpsProxyName,
         urlMap: (await callResourceOperation(
-          action.params,
-          settings,
           RESOURCE_OPERATIONS.get,
           GCCompute.UrlMapsClient,
+          credentials,
+          project,
           {
             urlMap: action.params.urlMapName,
           },
@@ -118,21 +131,24 @@ async function createTargetHttpsProxyResource(action, settings) {
 }
 
 async function createForwardingRuleResource(action, settings) {
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
+
   let target;
   if (action.params.httpProxyName) {
     target = (await callResourceOperation(
-      action.params,
-      settings,
       RESOURCE_OPERATIONS.get,
       GCCompute.TargetHttpProxiesClient,
+      credentials,
+      project,
       { targetHttpProxy: action.params.httpProxyName },
     )).selfLink;
   } else {
     target = (await callResourceOperation(
-      action.params,
-      settings,
       RESOURCE_OPERATIONS.get,
       GCCompute.TargetHttpsProxiesClient,
+      credentials,
+      project,
       { targetHttpsProxy: action.params.httpsProxyName },
     )).selfLink;
   }
@@ -150,6 +166,8 @@ async function createForwardingRuleResource(action, settings) {
 
 async function rollback(createdResources, action, settings) {
   const resourcesToRollback = _.reverse(createdResources);
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
   // eslint-disable-next-line no-restricted-syntax
   for (const resourceToRollback of resourcesToRollback) {
     const resource = {};
@@ -157,11 +175,12 @@ async function rollback(createdResources, action, settings) {
     try {
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(
-        { ...action.params, waitForOperation: true },
-        settings,
         RESOURCE_OPERATIONS.delete,
         resourceToRollback.client,
+        credentials,
+        project,
         resource,
+        true,
       );
     } catch (rollbackError) {
       console.error(rollbackError, "Rollback failed ");
@@ -172,6 +191,8 @@ async function rollback(createdResources, action, settings) {
 async function createGCPServices(loadBalancerResourcesData, action, settings) {
   const results = {};
   const createdResources = [];
+  const credentials = helpers.getCredentials(action.params, settings);
+  const project = helpers.getProject(action.params, settings);
   // eslint-disable-next-line no-restricted-syntax
   for (const resourceData of loadBalancerResourcesData) {
     try {
@@ -180,11 +201,12 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
       const { client } = resourceData;
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(
-        { ...action.params, waitForOperation: true },
-        settings,
         RESOURCE_OPERATIONS.create,
         client,
+        credentials,
+        project,
         resource,
+        true,
       );
       const { name } = resource[_.findKey(resource, "name")];
       createdResources.push({ ...resourceData, name });
@@ -204,10 +226,10 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
 
     // eslint-disable-next-line no-await-in-loop
     const createdResource = await callResourceOperation(
-      action.params,
-      settings,
       RESOURCE_OPERATIONS.get,
       resourceData.client,
+      credentials,
+      project,
       resource,
     );
     results[createdResource.kind] = createdResource;

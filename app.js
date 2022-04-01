@@ -2,6 +2,7 @@ const GCCompute = require("@google-cloud/compute");
 const _ = require("lodash");
 
 const autocomplete = require("./autocomplete");
+const helpers = require("./helpers");
 const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
@@ -16,13 +17,17 @@ function generateGcpPluginMethod({
   resourceOperationType,
   createResourceDefinitionFn,
 }) {
-  return (action, settings) => callResourceOperation(
-    action.params,
-    settings,
-    resourceOperationType,
-    GCPMethod,
-    createResourceDefinitionFn(action),
-  );
+  return (action, settings) => {
+    const credentials = helpers.getCredentials(action.params, settings);
+    const project = helpers.getProject(action.params, settings);
+    return callResourceOperation(
+      resourceOperationType,
+      GCPMethod,
+      credentials,
+      project,
+      createResourceDefinitionFn(action),
+    );
+  };
 }
 
 class SimpleGcpMethodDefinition {

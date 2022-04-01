@@ -22,9 +22,9 @@ async function createBackendServiceResource(action, settings) {
       backends: [
         {
           group: (await callResourceOperation(
-            RESOURCE_OPERATIONS.get,
             action.params,
             settings,
+            RESOURCE_OPERATIONS.get,
             GCCompute.InstanceGroupsClient,
             {
               zone: action.params.zone.value,
@@ -35,9 +35,9 @@ async function createBackendServiceResource(action, settings) {
       ],
       healthChecks: [
         (await callResourceOperation(
-          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
+          RESOURCE_OPERATIONS.get,
           GCCompute.HealthChecksClient,
           {
             zone: action.params.zone.value,
@@ -55,9 +55,9 @@ async function createUrlMapResource(action, settings) {
     urlMapResource: {
       name: action.params.urlMapName,
       defaultService: (await callResourceOperation(
-        RESOURCE_OPERATIONS.get,
         action.params,
         settings,
+        RESOURCE_OPERATIONS.get,
         GCCompute.BackendServicesClient,
         {
           backendService: action.params.backendServiceName,
@@ -74,9 +74,9 @@ async function createTargetHttpProxyResource(action, settings) {
       {
         name: action.params.httpProxyName,
         urlMap: (await callResourceOperation(
-          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
+          RESOURCE_OPERATIONS.get,
           GCCompute.UrlMapsClient,
           {
             urlMap: action.params.urlMapName,
@@ -89,9 +89,9 @@ async function createTargetHttpProxyResource(action, settings) {
 
 async function createTargetHttpsProxyResource(action, settings) {
   const sslCertificateURL = (await callResourceOperation(
-    RESOURCE_OPERATIONS.get,
     action.params,
     settings,
+    RESOURCE_OPERATIONS.get,
     GCCompute.SslCertificatesClient,
     {
       sslCertificate: action.params.sslCertificateName.value,
@@ -103,9 +103,9 @@ async function createTargetHttpsProxyResource(action, settings) {
       {
         name: action.params.httpsProxyName,
         urlMap: (await callResourceOperation(
-          RESOURCE_OPERATIONS.get,
           action.params,
           settings,
+          RESOURCE_OPERATIONS.get,
           GCCompute.UrlMapsClient,
           {
             urlMap: action.params.urlMapName,
@@ -121,17 +121,17 @@ async function createForwardingRuleResource(action, settings) {
   let target;
   if (action.params.httpProxyName) {
     target = (await callResourceOperation(
-      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
+      RESOURCE_OPERATIONS.get,
       GCCompute.TargetHttpProxiesClient,
       { targetHttpProxy: action.params.httpProxyName },
     )).selfLink;
   } else {
     target = (await callResourceOperation(
-      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
+      RESOURCE_OPERATIONS.get,
       GCCompute.TargetHttpsProxiesClient,
       { targetHttpsProxy: action.params.httpsProxyName },
     )).selfLink;
@@ -157,9 +157,9 @@ async function rollback(createdResources, action, settings) {
     try {
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(
-        RESOURCE_OPERATIONS.delete,
         { ...action.params, waitForOperation: true },
         settings,
+        RESOURCE_OPERATIONS.delete,
         resourceToRollback.client,
         resource,
       );
@@ -180,9 +180,9 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
       const { client } = resourceData;
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(
-        RESOURCE_OPERATIONS.create,
         { ...action.params, waitForOperation: true },
         settings,
+        RESOURCE_OPERATIONS.create,
         client,
         resource,
       );
@@ -204,9 +204,9 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
 
     // eslint-disable-next-line no-await-in-loop
     const createdResource = await callResourceOperation(
-      RESOURCE_OPERATIONS.get,
       action.params,
       settings,
+      RESOURCE_OPERATIONS.get,
       resourceData.client,
       resource,
     );

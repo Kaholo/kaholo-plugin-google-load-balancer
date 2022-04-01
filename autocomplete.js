@@ -1,4 +1,3 @@
-require("lodash");
 const GCCompute = require("@google-cloud/compute");
 
 const {
@@ -6,7 +5,7 @@ const {
   listGcpProjects,
   listGcpRegions,
   listGcpZones,
-} = require("./google-compute-lib");
+} = require("./gcp-autocomplete-lib");
 
 module.exports = {
   listProjectsAuto: listGcpProjects,

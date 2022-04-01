@@ -5,7 +5,7 @@ const autocomplete = require("./autocomplete");
 const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
-} = require("./google-compute-lib");
+} = require("./gcp-lib");
 const {
   runHttpExternalLoadBalancerCreation,
   runHttpsExternalLoadBalancerCreation,

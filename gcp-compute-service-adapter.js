@@ -3,7 +3,7 @@ const _ = require("lodash");
 const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
-} = require("./google-compute-lib");
+} = require("./gcp-lib");
 
 function createHealthCheckResource(action) {
   return {

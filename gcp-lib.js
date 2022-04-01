@@ -8,6 +8,8 @@ const RESOURCE_OPERATIONS = {
   create: _.partial(callMethod, "insert"),
   get: async (client, request) => (await _.partial(callMethod, "get")(client, request))[0],
   delete: _.partial(callMethod, "delete"),
+  listAsync: _.partial(callMethod, "listAsync"),
+  searchProjectsAsync: _.partial(callMethod, "searchProjectsAsync"),
 };
 
 async function callResourceOperation(resourceOperation, params, settings, clientClass, resource) {
@@ -51,5 +53,4 @@ async function callMethod(methodName, client, request, waitForOperation = false)
 module.exports = {
   RESOURCE_OPERATIONS,
   callResourceOperation,
-  callMethod,
 };

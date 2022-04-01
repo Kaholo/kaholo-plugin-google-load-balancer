@@ -3,7 +3,7 @@ const { ProjectsClient } = require("@google-cloud/resource-manager");
 const _ = require("lodash");
 
 const {
-  callMethod,
+  RESOURCE_OPERATIONS,
 } = require("./gcp-lib");
 const parsers = require("./parsers");
 const helpers = require("./helpers");
@@ -51,7 +51,7 @@ async function searchProjects(params, settings) {
 
   const request = { query: query ? `name:*${query}*` : undefined };
 
-  const iterable = await _.partial(callMethod, "searchProjectsAsync")(authorizedClient, request);
+  const iterable = await RESOURCE_OPERATIONS.searchProjectsAsync(authorizedClient, request);
   const res = [];
 
   try {
@@ -86,7 +86,7 @@ async function listResources(params, settings, clientClass, resource = {}) {
   const request = _.merge({ project, region, zone }, resource);
 
   const res = [];
-  const iterable = await _.partial(callMethod, "listAsync")(authorizedClient, request);
+  const iterable = await RESOURCE_OPERATIONS.listAsync(authorizedClient, request);
 
   try {
     // eslint-disable-next-line no-restricted-syntax

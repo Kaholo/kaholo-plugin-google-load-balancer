@@ -1,8 +1,8 @@
 const GCCompute = require("@google-cloud/compute");
-const _ = require("lodash");
 const {
   RESOURCE_OPERATIONS,
   callResourceOperation,
+  createMultipleGCPServices,
 } = require("./gcp-lib");
 const helpers = require("./helpers");
 
@@ -149,80 +149,6 @@ async function createForwardingRuleResource(action, credentials, project) {
   return forwardingRuleResource;
 }
 
-async function rollback(createdResources, credentials, project) {
-  const resourcesToRollback = _.reverse(createdResources);
-  // eslint-disable-next-line no-restricted-syntax
-  for (const resourceToRollback of resourcesToRollback) {
-    const resource = {};
-    resource[resourceToRollback.typeProperty] = resourceToRollback.name;
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      await callResourceOperation(
-        RESOURCE_OPERATIONS.delete,
-        resourceToRollback.client,
-        credentials,
-        project,
-        resource,
-        true,
-      );
-    } catch (rollbackError) {
-      console.error(rollbackError, "Rollback failed ");
-    }
-  }
-}
-
-async function createGCPServices(loadBalancerResourcesData, action, credentials, project) {
-  const results = {};
-  const createdResources = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const resourceData of loadBalancerResourcesData) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const resource = await resourceData.createResourceFunc(
-        action,
-        credentials,
-        project,
-      );
-      const { client } = resourceData;
-      // eslint-disable-next-line no-await-in-loop
-      await callResourceOperation(
-        RESOURCE_OPERATIONS.create,
-        client,
-        credentials,
-        project,
-        resource,
-        true,
-      );
-      const { name } = resource[_.findKey(resource, "name")];
-      createdResources.push({ ...resourceData, name });
-    } catch (err) {
-      if (createdResources.length > 0) {
-        console.error("Starting rollback");
-        // eslint-disable-next-line no-await-in-loop
-        await rollback(createdResources, credentials, project);
-      }
-      throw err;
-    }
-  }
-  // eslint-disable-next-line no-restricted-syntax
-  for (const resourceData of createdResources) {
-    const resource = { zone: action.params.zone.value };
-    resource[resourceData.typeProperty] = resourceData.name;
-
-    // eslint-disable-next-line no-await-in-loop
-    const createdResource = await callResourceOperation(
-      RESOURCE_OPERATIONS.get,
-      resourceData.client,
-      credentials,
-      project,
-      resource,
-    );
-    results[createdResource.kind] = createdResource;
-  }
-
-  return results;
-}
-
 function createLoadBalancerResourcesData(proxyType) {
   return [
     { client: GCCompute.HealthChecksClient, createResourceFunc: createHealthCheckResource, typeProperty: "healthCheck" },
@@ -236,13 +162,13 @@ function createLoadBalancerResourcesData(proxyType) {
 }
 
 module.exports = {
-  runHttpExternalLoadBalancerCreation: (action, settings) => createGCPServices(
+  runHttpExternalLoadBalancerCreation: (action, settings) => createMultipleGCPServices(
     createLoadBalancerResourcesData("http"),
     action,
     helpers.getCredentials(action.params, settings),
     helpers.getProject(action.params, settings),
   ),
-  runHttpsExternalLoadBalancerCreation: (action, settings) => createGCPServices(
+  runHttpsExternalLoadBalancerCreation: (action, settings) => createMultipleGCPServices(
     createLoadBalancerResourcesData("https"),
     action,
     helpers.getCredentials(action.params, settings),

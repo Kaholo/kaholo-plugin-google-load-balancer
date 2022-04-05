@@ -10,7 +10,7 @@ const {
 const {
   runHttpExternalLoadBalancerCreation,
   runHttpsExternalLoadBalancerCreation,
-} = require("./gcp-compute-service-adapter");
+} = require("./gcp-load-balancer");
 
 function generateGcpPluginMethod({
   GCPMethod,

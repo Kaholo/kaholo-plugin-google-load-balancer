@@ -16,7 +16,7 @@ function createHealthCheckResource(name, type) {
   };
 }
 
-async function createBackendServiceResource(action, settings, credentials, project) {
+async function createBackendServiceResource(action, credentials, project) {
   const backendServiceResource = {
     backendServiceResource: {
       name: action.params.backendServiceName,
@@ -51,7 +51,7 @@ async function createBackendServiceResource(action, settings, credentials, proje
   return backendServiceResource;
 }
 
-async function createUrlMapResource(action, settings, credentials, project) {
+async function createUrlMapResource(action, credentials, project) {
   const urlMapResource = {
     urlMapResource: {
       name: action.params.urlMapName,
@@ -69,7 +69,7 @@ async function createUrlMapResource(action, settings, credentials, project) {
   return urlMapResource;
 }
 
-async function createTargetHttpProxyResource(action, settings, credentials, project) {
+async function createTargetHttpProxyResource(action, credentials, project) {
   const targetHttpProxyResource = {
     targetHttpProxyResource:
       {
@@ -88,7 +88,7 @@ async function createTargetHttpProxyResource(action, settings, credentials, proj
   return targetHttpProxyResource;
 }
 
-async function createTargetHttpsProxyResource(action, settings, credentials, project) {
+async function createTargetHttpsProxyResource(action, credentials, project) {
   const sslCertificateURL = (await callResourceOperation(
     RESOURCE_OPERATIONS.get,
     GCCompute.SslCertificatesClient,
@@ -118,7 +118,7 @@ async function createTargetHttpsProxyResource(action, settings, credentials, pro
   return targetHttpsProxyResource;
 }
 
-async function createForwardingRuleResource(action, settings, credentials, project) {
+async function createForwardingRuleResource(action, credentials, project) {
   let target;
   if (action.params.httpProxyName) {
     target = (await callResourceOperation(
@@ -182,7 +182,6 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
       // eslint-disable-next-line no-await-in-loop
       const resource = await resourceData.createResourceFunc(
         action,
-        settings,
         credentials,
         project,
       );

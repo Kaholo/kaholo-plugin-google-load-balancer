@@ -54,13 +54,9 @@ async function searchProjects(params, settings) {
   const iterable = await RESOURCE_OPERATIONS.searchProjectsAsync(authorizedClient, request);
   const res = [];
 
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const proj of iterable) {
-      res.push(proj);
-    }
-  } catch (error) {
-    return Promise.reject(error);
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const proj of iterable) {
+    res.push(proj);
   }
 
   return res;
@@ -88,14 +84,11 @@ async function listResources(params, settings, clientClass, resource = {}) {
   const res = [];
   const iterable = await RESOURCE_OPERATIONS.listAsync(authorizedClient, request);
 
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const response of iterable) {
-      res.push({ id: response.id, name: response.name });
-    }
-  } catch (err) {
-    return Promise.reject(err);
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const response of iterable) {
+    res.push({ id: response.id, name: response.name });
   }
+
   return res;
 }
 

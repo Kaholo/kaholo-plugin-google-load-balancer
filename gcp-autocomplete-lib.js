@@ -49,9 +49,16 @@ async function searchProjects(params, settings) {
   const authorizedClient = helpers.getAuthorizedClient(ProjectsClient, credentials);
   const { query } = params;
 
-  const request = { query: query ? `name:*${query}*` : undefined };
+  const request = {};
+  if (query) {
+    request.query = `name:*${query}*`;
+  }
 
-  const iterable = await RESOURCE_OPERATIONS.searchProjectsAsync(authorizedClient, request);
+  const iterable = await RESOURCE_OPERATIONS.searchProjectsAsync(
+    authorizedClient,
+    credentials,
+    request,
+  );
   const res = [];
 
   // eslint-disable-next-line no-restricted-syntax
@@ -82,7 +89,7 @@ async function listResources(params, settings, clientClass, resource = {}) {
   const request = _.merge({ project, region, zone }, resource);
 
   const res = [];
-  const iterable = await RESOURCE_OPERATIONS.listAsync(authorizedClient, request);
+  const iterable = await RESOURCE_OPERATIONS.listAsync(authorizedClient, credentials, request);
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const response of iterable) {

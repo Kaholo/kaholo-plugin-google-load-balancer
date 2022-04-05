@@ -12,30 +12,26 @@ const {
   runHttpsExternalLoadBalancerCreation,
 } = require("./gcp-load-balancer");
 
-function generateGcpPluginMethod({
-  GCPMethod,
-  resourceOperationType,
-  createResourceDefinitionFn,
-}) {
-  return (action, settings) => {
-    const credentials = helpers.getCredentials(action.params, settings);
-    const project = helpers.getProject(action.params, settings);
-    const resource = createResourceDefinitionFn(action);
-    return callResourceOperation(
-      resourceOperationType,
-      GCPMethod,
-      credentials,
-      project,
-      resource,
-    );
-  };
-}
-
 class SimpleGcpMethodDefinition {
   constructor(GCPMethod, resourceOperationType, createResourceDefinitionFn) {
     this.GCPMethod = GCPMethod;
     this.resourceOperationType = resourceOperationType;
     this.createResourceDefinitionFn = createResourceDefinitionFn;
+  }
+
+  generatePluginMethod() {
+    return (action, settings) => {
+      const credentials = helpers.getCredentials(action.params, settings);
+      const project = helpers.getProject(action.params, settings);
+      const resource = this.createResourceDefinitionFn(action);
+      return callResourceOperation(
+        this.resourceOperationType,
+        this.GCPMethod,
+        credentials,
+        project,
+        resource,
+      );
+    };
   }
 }
 
@@ -216,7 +212,7 @@ const simpleGcpMethodsDefinitions = {
 
 const simpleGCPMethods = _.mapValues(
   simpleGcpMethodsDefinitions,
-  (methodDefinition) => generateGcpPluginMethod(methodDefinition),
+  (methodDefinition) => methodDefinition.generatePluginMethod(),
 );
 
 /* eslint-disable max-len */

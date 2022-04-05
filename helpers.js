@@ -40,7 +40,7 @@ function getZone(params) {
 
 function getAuthorizedClient(ClientClass, credentials) {
   const clientInstance = new ClientClass({ credentials });
-  return { clientInstance, credentials };
+  return clientInstance;
 }
 
 module.exports = {

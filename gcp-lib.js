@@ -25,6 +25,7 @@ async function callResourceOperation(
 
   const result = await resourceOperation(
     authorizedClient,
+    credentials,
     request,
     waitForOperation,
   );
@@ -121,15 +122,15 @@ async function rollback(createdResources, credentials, project) {
   }
 }
 
-async function callMethod(methodName, client, request, waitForOperation = false) {
-  const result = await client.clientInstance[methodName](request);
+async function callMethod(methodName, client, credentials, request, waitForOperation = false) {
+  const result = await client[methodName](request);
 
   if (!waitForOperation) {
     return result;
   }
 
   const operationsClient = new GCCompute.GlobalOperationsClient({
-    credentials: client.credentials,
+    credentials,
   });
 
   let [operation] = result;

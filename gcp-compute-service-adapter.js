@@ -6,11 +6,11 @@ const {
 } = require("./gcp-lib");
 const helpers = require("./helpers");
 
-function createHealthCheckResource(name, type) {
+function createHealthCheckResource(action) {
   return {
     healthCheckResource: {
-      name,
-      type,
+      name: action.params.healthCheckName,
+      type: action.params.type,
       httpHealthCheck: {},
     },
   };
@@ -225,7 +225,7 @@ async function createGCPServices(loadBalancerResourcesData, action, credentials,
 
 function createLoadBalancerResourcesData(proxyType) {
   return [
-    { client: GCCompute.HealthChecksClient, createResourceFunc: (action) => createHealthCheckResource(action.params.healthCheckName, action.params.type), typeProperty: "healthCheck" },
+    { client: GCCompute.HealthChecksClient, createResourceFunc: createHealthCheckResource, typeProperty: "healthCheck" },
     { client: GCCompute.BackendServicesClient, createResourceFunc: createBackendServiceResource, typeProperty: "backendService" },
     { client: GCCompute.UrlMapsClient, createResourceFunc: createUrlMapResource, typeProperty: "urlMap" },
     proxyType === "http"

@@ -31,19 +31,30 @@ async function callResourceOperation(
   return result;
 }
 
-async function createMultipleGCPServices(loadBalancerResourcesData, action, credentials, project) {
-  const results = {};
+async function createMultipleGCPServices(
+  servicesDefinitions,
+  action,
+  credentials,
+  project,
+) {
+  const createdResources = await createResources(servicesDefinitions, action, credentials, project);
+  const zone = action.params.zone.value;
+  const results = await getCreatedResources(createdResources, zone, credentials, project);
+  return results;
+}
+
+async function createResources(servicesDefinitions, action, credentials, project) {
   const createdResources = [];
   // eslint-disable-next-line no-restricted-syntax
-  for (const resourceData of loadBalancerResourcesData) {
+  for (const serviceDefinition of servicesDefinitions) {
     try {
+      const { client, createResourceFunc } = serviceDefinition;
       // eslint-disable-next-line no-await-in-loop
-      const resource = await resourceData.createResourceFunc(
+      const resource = await createResourceFunc(
         action,
         credentials,
         project,
       );
-      const { client } = resourceData;
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(
         RESOURCE_OPERATIONS.create,
@@ -54,7 +65,7 @@ async function createMultipleGCPServices(loadBalancerResourcesData, action, cred
         true,
       );
       const { name } = resource[_.findKey(resource, "name")];
-      createdResources.push({ ...resourceData, name });
+      createdResources.push({ ...serviceDefinition, name });
     } catch (err) {
       if (createdResources.length > 0) {
         console.error("Starting rollback");
@@ -64,9 +75,14 @@ async function createMultipleGCPServices(loadBalancerResourcesData, action, cred
       throw err;
     }
   }
+  return createdResources;
+}
+
+async function getCreatedResources(createdResources, zone, credentials, project) {
+  const results = {};
   // eslint-disable-next-line no-restricted-syntax
   for (const resourceData of createdResources) {
-    const resource = { zone: action.params.zone.value };
+    const resource = { zone };
     resource[resourceData.typeProperty] = resourceData.name;
 
     // eslint-disable-next-line no-await-in-loop

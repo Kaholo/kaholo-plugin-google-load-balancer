@@ -16,10 +16,7 @@ function createHealthCheckResource(action) {
   };
 }
 
-async function createBackendServiceResource(action, settings) {
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
-
+async function createBackendServiceResource(action, settings, credentials, project) {
   const backendServiceResource = {
     backendServiceResource: {
       name: action.params.backendServiceName,
@@ -54,10 +51,7 @@ async function createBackendServiceResource(action, settings) {
   return backendServiceResource;
 }
 
-async function createUrlMapResource(action, settings) {
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
-
+async function createUrlMapResource(action, settings, credentials, project) {
   const urlMapResource = {
     urlMapResource: {
       name: action.params.urlMapName,
@@ -75,10 +69,7 @@ async function createUrlMapResource(action, settings) {
   return urlMapResource;
 }
 
-async function createTargetHttpProxyResource(action, settings) {
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
-
+async function createTargetHttpProxyResource(action, settings, credentials, project) {
   const targetHttpProxyResource = {
     targetHttpProxyResource:
       {
@@ -97,10 +88,7 @@ async function createTargetHttpProxyResource(action, settings) {
   return targetHttpProxyResource;
 }
 
-async function createTargetHttpsProxyResource(action, settings) {
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
-
+async function createTargetHttpsProxyResource(action, settings, credentials, project) {
   const sslCertificateURL = (await callResourceOperation(
     RESOURCE_OPERATIONS.get,
     GCCompute.SslCertificatesClient,
@@ -130,10 +118,7 @@ async function createTargetHttpsProxyResource(action, settings) {
   return targetHttpsProxyResource;
 }
 
-async function createForwardingRuleResource(action, settings) {
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
-
+async function createForwardingRuleResource(action, settings, credentials, project) {
   let target;
   if (action.params.httpProxyName) {
     target = (await callResourceOperation(
@@ -197,7 +182,12 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
   for (const resourceData of loadBalancerResourcesData) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const resource = await resourceData.createResourceFunc(action, settings);
+      const resource = await resourceData.createResourceFunc(
+        action,
+        settings,
+        credentials,
+        project,
+      );
       const { client } = resourceData;
       // eslint-disable-next-line no-await-in-loop
       await callResourceOperation(

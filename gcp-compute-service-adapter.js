@@ -6,11 +6,11 @@ const {
 } = require("./gcp-lib");
 const helpers = require("./helpers");
 
-function createHealthCheckResource(action) {
+function createHealthCheckResource(name, type) {
   return {
     healthCheckResource: {
-      name: action.params.healthCheckName,
-      type: action.params.type,
+      name,
+      type,
       httpHealthCheck: {},
     },
   };
@@ -228,32 +228,19 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
   return results;
 }
 
-async function runHttpExternalLoadBalancerCreation(action, settings) {
-  const loadBalancerResourcesData = [
-    { client: GCCompute.HealthChecksClient, createResourceFunc: createHealthCheckResource, typeProperty: "healthCheck" },
+function createLoadBalancerResourcesData(proxyType) {
+  return [
+    { client: GCCompute.HealthChecksClient, createResourceFunc: (action) => createHealthCheckResource(action.params.healthCheckName, action.params.type), typeProperty: "healthCheck" },
     { client: GCCompute.BackendServicesClient, createResourceFunc: createBackendServiceResource, typeProperty: "backendService" },
     { client: GCCompute.UrlMapsClient, createResourceFunc: createUrlMapResource, typeProperty: "urlMap" },
-    { client: GCCompute.TargetHttpProxiesClient, createResourceFunc: createTargetHttpProxyResource, typeProperty: "targetHttpProxy" },
+    proxyType === "http"
+      ? { client: GCCompute.TargetHttpProxiesClient, createResourceFunc: createTargetHttpProxyResource, typeProperty: "targetHttpProxy" }
+      : { client: GCCompute.TargetHttpsProxiesClient, createResourceFunc: createTargetHttpsProxyResource, typeProperty: "targetHttpsProxy" },
     { client: GCCompute.GlobalForwardingRulesClient, createResourceFunc: createForwardingRuleResource, typeProperty: "forwardingRule" },
   ];
-
-  const result = await createGCPServices(loadBalancerResourcesData, action, settings);
-  return result;
-}
-
-async function runHttpsExternalLoadBalancerCreation(action, settings) {
-  const loadBalancerResourcesData = [
-    { client: GCCompute.HealthChecksClient, createResourceFunc: createHealthCheckResource, typeProperty: "healthCheck" },
-    { client: GCCompute.BackendServicesClient, createResourceFunc: createBackendServiceResource, typeProperty: "backendService" },
-    { client: GCCompute.UrlMapsClient, createResourceFunc: createUrlMapResource, typeProperty: "urlMap" },
-    { client: GCCompute.TargetHttpsProxiesClient, createResourceFunc: createTargetHttpsProxyResource, typeProperty: "targetHttpsProxy" },
-    { client: GCCompute.GlobalForwardingRulesClient, createResourceFunc: createForwardingRuleResource, typeProperty: "forwardingRule" },
-  ];
-  const result = await createGCPServices(loadBalancerResourcesData, action, settings);
-  return result;
 }
 
 module.exports = {
-  runHttpExternalLoadBalancerCreation,
-  runHttpsExternalLoadBalancerCreation,
+  runHttpExternalLoadBalancerCreation: (action, settings) => createGCPServices(createLoadBalancerResourcesData("http"), action, settings),
+  runHttpsExternalLoadBalancerCreation: (action, settings) => createGCPServices(createLoadBalancerResourcesData("https"), action, settings),
 };

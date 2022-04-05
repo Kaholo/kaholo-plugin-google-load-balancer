@@ -171,11 +171,9 @@ async function rollback(createdResources, credentials, project) {
   }
 }
 
-async function createGCPServices(loadBalancerResourcesData, action, settings) {
+async function createGCPServices(loadBalancerResourcesData, action, credentials, project) {
   const results = {};
   const createdResources = [];
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
   // eslint-disable-next-line no-restricted-syntax
   for (const resourceData of loadBalancerResourcesData) {
     try {
@@ -238,6 +236,16 @@ function createLoadBalancerResourcesData(proxyType) {
 }
 
 module.exports = {
-  runHttpExternalLoadBalancerCreation: (action, settings) => createGCPServices(createLoadBalancerResourcesData("http"), action, settings),
-  runHttpsExternalLoadBalancerCreation: (action, settings) => createGCPServices(createLoadBalancerResourcesData("https"), action, settings),
+  runHttpExternalLoadBalancerCreation: (action, settings) => createGCPServices(
+    createLoadBalancerResourcesData("http"),
+    action,
+    helpers.getCredentials(action.params, settings),
+    helpers.getProject(action.params, settings),
+  ),
+  runHttpsExternalLoadBalancerCreation: (action, settings) => createGCPServices(
+    createLoadBalancerResourcesData("https"),
+    action,
+    helpers.getCredentials(action.params, settings),
+    helpers.getProject(action.params, settings),
+  ),
 };

@@ -149,10 +149,8 @@ async function createForwardingRuleResource(action, settings, credentials, proje
   return forwardingRuleResource;
 }
 
-async function rollback(createdResources, action, settings) {
+async function rollback(createdResources, credentials, project) {
   const resourcesToRollback = _.reverse(createdResources);
-  const credentials = helpers.getCredentials(action.params, settings);
-  const project = helpers.getProject(action.params, settings);
   // eslint-disable-next-line no-restricted-syntax
   for (const resourceToRollback of resourcesToRollback) {
     const resource = {};
@@ -204,7 +202,7 @@ async function createGCPServices(loadBalancerResourcesData, action, settings) {
       if (createdResources.length > 0) {
         console.error("Starting rollback");
         // eslint-disable-next-line no-await-in-loop
-        await rollback(createdResources, action, settings);
+        await rollback(createdResources, credentials, project);
       }
       throw err;
     }

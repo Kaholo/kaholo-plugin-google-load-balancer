@@ -20,12 +20,13 @@ function generateGcpPluginMethod({
   return (action, settings) => {
     const credentials = helpers.getCredentials(action.params, settings);
     const project = helpers.getProject(action.params, settings);
+    const resource = createResourceDefinitionFn(action);
     return callResourceOperation(
       resourceOperationType,
       GCPMethod,
       credentials,
       project,
-      createResourceDefinitionFn(action),
+      resource,
     );
   };
 }

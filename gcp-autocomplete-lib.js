@@ -16,8 +16,7 @@ function createListItemsFunction(clientClass, fields) {
 }
 
 async function listGcpProjects(query, pluginSettings, pluginParams) {
-  const { result } = await getProjects(["projectId", "displayName"], pluginSettings, pluginParams);
-  return result;
+  return getProjects(["projectId", "displayName"], pluginSettings, pluginParams);
 }
 
 async function listGcpRegions(query, pluginSettings, pluginParams) {
@@ -39,16 +38,14 @@ async function getProjects(fields, pluginSettings, pluginParams) {
   const settings = helpers.mapAutoParams(pluginSettings);
   const params = helpers.mapAutoParams(pluginParams);
 
-  let result = await searchProjects(params, settings);
-  result = [...result.map(parseFunc)];
-  return { params, result };
-}
-
-async function searchProjects(params, settings) {
   const credentials = helpers.getCredentials(params, settings);
   const authorizedClient = helpers.getAuthorizedClient(ProjectsClient, credentials);
-  const { query } = params;
 
+  const projectsResult = await searchProjects(params.query, credentials, authorizedClient);
+  return projectsResult.map(parseFunc);
+}
+
+async function searchProjects(query, credentials, authorizedClient) {
   const request = {};
   if (query) {
     request.query = `name:*${query}*`;
@@ -74,18 +71,19 @@ async function getListResults(fields, pluginSettings, pluginParams, clientClass)
   const settings = helpers.mapAutoParams(pluginSettings);
   const params = helpers.mapAutoParams(pluginParams);
 
-  let result = await listResources(params, settings, clientClass);
-  result = [...result.map(parseFunc)];
-  return { params, result };
-}
-
-async function listResources(params, settings, clientClass, resource = {}) {
   const credentials = helpers.getCredentials(params, settings);
+  const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
+
   const project = helpers.getProject(params, settings);
   const region = helpers.getRegion(params);
   const zone = helpers.getZone(params);
-  const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
 
+  let result = await listResources(credentials, authorizedClient, project, region, zone, clientClass);
+  result = result.map(parseFunc);
+  return { params, result };
+}
+
+async function listResources(credentials, authorizedClient, project, region, zone, resource = {}) {
   const request = _.merge({ project, region, zone }, resource);
 
   const res = [];

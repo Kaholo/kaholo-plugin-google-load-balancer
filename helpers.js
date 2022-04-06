@@ -8,7 +8,7 @@ function mapAutoParams(autoParams) {
   return params;
 }
 
-function getParseFromParam(idParamName, valParamName) {
+function generateToAutocompleteMapper(idParamName, valParamName) {
   return (item) => ({
     id: item[idParamName],
     value: item[valParamName] || item[idParamName],
@@ -38,17 +38,11 @@ function getZone(params) {
   return zone;
 }
 
-function getAuthorizedClient(ClientClass, credentials) {
-  const clientInstance = new ClientClass({ credentials });
-  return clientInstance;
-}
-
 module.exports = {
-  getParseFromParam,
+  generateToAutocompleteMapper,
   mapAutoParams,
   getCredentials,
   getProject,
   getRegion,
   getZone,
-  getAuthorizedClient,
 };

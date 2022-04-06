@@ -2,7 +2,6 @@
 
 const _ = require("lodash");
 const GCCompute = require("@google-cloud/compute");
-const helpers = require("./helpers");
 
 const RESOURCE_OPERATIONS = {
   create: _.partial(callMethod, "insert"),
@@ -14,13 +13,13 @@ const RESOURCE_OPERATIONS = {
 
 async function callResourceOperation(
   resourceOperation,
-  clientClass,
+  ClientClass,
   credentials,
   project,
   resource,
   waitForOperation,
 ) {
-  const authorizedClient = helpers.getAuthorizedClient(clientClass, credentials);
+  const authorizedClient = new ClientClass({ credentials });
   const request = _.merge({ project }, resource);
 
   const result = await resourceOperation(

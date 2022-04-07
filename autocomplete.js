@@ -7,19 +7,19 @@ const {
   generateGCPAutocompleter,
   getProjects,
 } = require("./gcp-autocomplete-lib");
-const helpers = require("./helpers");
 const parsers = require("./parsers");
 
-function generateListZonesFilter(pluginSettings, pluginParams) {
-  const params = helpers.mapAutoParams(pluginParams);
-  const region = parsers.autocomplete(params.region);
+function generateListZonesFilter(query, settings, params) {
+  // none of the methods use both zones and regions params,
+  // but since it's present in settings, we check params just in case
+  const region = parsers.autocomplete(params.region || settings.region);
   return (zone) => !region || zone.name.includes(region);
 }
 
 module.exports = {
-  listProjectsAuto: generateGCPAutocompleter(ProjectsClient, ["projectId", "displayName"], getProjects),
+  listProjectsAuto: generateGCPAutocompleter(ProjectsClient, ["projectId", "displayName"], null, getProjects),
   listRegionsAuto: generateGCPAutocompleter(GCCompute.RegionsClient, ["name"]),
-  listZonesAuto: generateGCPAutocompleter(GCCompute.ZonesClient, ["name"], null, generateListZonesFilter),
+  listZonesAuto: generateGCPAutocompleter(GCCompute.ZonesClient, ["name"], generateListZonesFilter),
   listInstanceGroupsAuto: generateGCPAutocompleter(GCCompute.InstanceGroupsClient, ["id", "name"]),
   listHealthChecksAuto: generateGCPAutocompleter(GCCompute.HealthChecksClient, ["id", "name"]),
   listSslCertificatesAuto: generateGCPAutocompleter(GCCompute.SslCertificatesClient, ["id", "name"]),

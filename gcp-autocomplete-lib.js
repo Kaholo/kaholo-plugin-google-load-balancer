@@ -6,8 +6,10 @@ const helpers = require("./helpers");
 function generateGCPAutocompleter(
   ClientClass,
   fieldsToSelect,
-  filterGenerator = null,
-  listingFunction = genericList,
+  {
+    filterGenerator = null,
+    listingFunction = genericList,
+  } = {},
 ) {
   return async function gcpAutocompleter(query, pluginSettings, pluginParams) {
     const settings = helpers.mapAutoParams(pluginSettings);

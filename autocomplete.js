@@ -17,9 +17,13 @@ function generateListZonesFilter(query, settings, params) {
 }
 
 module.exports = {
-  listProjectsAuto: generateGCPAutocompleter(ProjectsClient, ["projectId", "displayName"], null, getProjects),
+  listProjectsAuto: generateGCPAutocompleter(ProjectsClient, ["projectId", "displayName"], {
+    listingFunction: getProjects,
+  }),
   listRegionsAuto: generateGCPAutocompleter(GCCompute.RegionsClient, ["name"]),
-  listZonesAuto: generateGCPAutocompleter(GCCompute.ZonesClient, ["name"], generateListZonesFilter),
+  listZonesAuto: generateGCPAutocompleter(GCCompute.ZonesClient, ["name"], {
+    filterGenerator: generateListZonesFilter,
+  }),
   listInstanceGroupsAuto: generateGCPAutocompleter(GCCompute.InstanceGroupsClient, ["id", "name"]),
   listHealthChecksAuto: generateGCPAutocompleter(GCCompute.HealthChecksClient, ["id", "name"]),
   listSslCertificatesAuto: generateGCPAutocompleter(GCCompute.SslCertificatesClient, ["id", "name"]),

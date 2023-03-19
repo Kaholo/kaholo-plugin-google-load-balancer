@@ -54,16 +54,16 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
         },
         {
           "name": "project",
-          "viewName": "Project *",
-          "required": false,
+          "viewName": "Project",
+          "required": true,
           "type": "autocomplete",
           "autocompleteType": "function",
           "functionName": "listProjectsAuto",
@@ -82,7 +82,7 @@
         },
         {
           "name": "type",
-          "viewName": "HealthCheck type *",
+          "viewName": "HealthCheck type",
           "required": true,
           "type": "string",
           "description": "Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS or HTTP2. Exactly one of the protocol-specific health check field must be specified, which must match type field.",
@@ -164,8 +164,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -285,8 +285,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -327,8 +327,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -369,8 +369,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -411,8 +411,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -453,8 +453,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -495,8 +495,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -537,8 +537,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -579,8 +579,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -621,8 +621,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -663,8 +663,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -705,8 +705,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -747,8 +747,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -789,8 +789,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -833,8 +833,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -877,8 +877,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -921,8 +921,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -965,8 +965,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1009,8 +1009,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1053,8 +1053,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1097,8 +1097,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1141,8 +1141,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1185,8 +1185,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1229,8 +1229,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
@@ -1284,8 +1284,8 @@
       "params": [
         {
           "name": "creds",
-          "viewName": "Service Account Credentials *",
-          "required": false,
+          "viewName": "Service Account Credentials",
+          "required": true,
           "type": "vault",
           "description": "Vaulted JSON document containing service account credentials as provided by GCP",
           "learnUrl": "https://cloud.google.com/docs/authentication/production"
